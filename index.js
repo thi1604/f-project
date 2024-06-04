@@ -1,17 +1,12 @@
-const express = require('express');
+const express = require("express");
 const app = express();
 const port = 3000;
+const routeClient = require("./routes/client/index.route"); //Nhung folder route va di toi route cua trang client
 
-app.set('views', './views');
-app.set('views engine', 'pug');
+app.set("views", "./views");
+app.set("views engine", "pug");
 
-app.get('/', (req, res) => {
-    res.render("client/pages/home/index.pug");
-});
-
-app.get('/product', (req, res) => {
-    res.render("client/pages/product/index.pug");
-});
+routeClient.index(app);
 
 app.listen(port, () => {
     console.log(`Dang chay cong ${port}`);
