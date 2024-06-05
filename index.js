@@ -1,7 +1,8 @@
 const express = require("express");
 const app = express();
-const port = 3000;
 const routeClient = require("./routes/client/index.route"); //Nhung folder route va di toi route cua trang client
+require('dotenv').config(); // Cau hinh file .env
+const port = process.env.PORT;
 
 app.set("views", "./views");
 app.set("views engine", "pug");
