@@ -9,6 +9,9 @@ app.set("views engine", "pug");
 app.use(express.static('public'));
 
 routeClient.index(app);
+const database = require("./config/database.js");
+
+database.connect();
 
 app.listen(port, () => {
     console.log(`Dang chay cong ${port}`);
