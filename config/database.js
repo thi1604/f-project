@@ -1,4 +1,4 @@
-const mongoose = require('mongoose');
+const mongoose = require("mongoose");
 
 module.exports.connect = async () => {
   try{
@@ -8,3 +8,5 @@ module.exports.connect = async () => {
     console.log("Ket noi database that bai!");
   }
 };
+
+
