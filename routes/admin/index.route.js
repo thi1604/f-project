@@ -1,7 +1,9 @@
 const homeRouter = require("./home.route");
 const productRouter = require("./product.route");
+const prefixUrl = require("../../config/system.js");
 
 module.exports.index = (app) => {
-    app.use("/admin", homeRouter);
-    app.use("/admin/product", productRouter);
+    const name = prefixUrl().admin;  //Thu ham cho nay !!
+    app.use(`/${name}`, homeRouter);
+    app.use(`/${name}/product`, productRouter);
 };
