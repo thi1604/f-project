@@ -40,6 +40,7 @@ search.addEventListener("submit", (event) => {
   window.location.href = url.href;
 });
 
+//End Search products
 
 
 

@@ -15,11 +15,28 @@ module.exports.index = async (req, res) => {
     keyword = req.query.keyword;
   }
   // Hết Tìm kiếm
+
+  const listFilter = [
+    {
+      label : "Tất cả",
+      status : ""
+    },
+    {
+      label : "Hoạt động",
+      status : "active"
+    },
+    {
+      label : "Dừng hoạt động",
+      status : "inactive"
+    }
+];
   
   const Product = await product.find(filter);
   res.render("admin/pages/products/index.pug", {
+    pageTitle : "Trang sản phẩm ",
     listProducts: Product,
-    keyword: keyword
+    keyword: keyword,
+    listFilter : listFilter
   });
 }
 
