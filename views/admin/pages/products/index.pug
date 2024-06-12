@@ -17,7 +17,23 @@ block main
         class="btn btn-sm ml-1 btn-outline-success"
         button-status = "inactive"
       ) Dừng hoạt động
-
+       //- Search
+      .col-6
+        form(form-search = "")
+          .input-group
+            input(
+              type="text"
+              placeholder="Nhập từ khóa"
+              name="keyword"
+              class="form-control"
+              value=keyword
+            )
+            .input-group-append
+              button(
+                class="btn btn-success"
+                type="submit"
+              ) Tìm
+      //- End Search
     .card.mb-3
       .card-header Danh sách
       .card-body

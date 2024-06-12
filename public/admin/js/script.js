@@ -1,6 +1,7 @@
 
-const listProducts = document.querySelectorAll("[button-status]");
+// filter producst
 
+const listProducts = document.querySelectorAll("[button-status]");
 let url = new URL(window.location.href);
 
 listProducts.forEach((item)=>{
@@ -16,10 +17,30 @@ listProducts.forEach((item)=>{
   });
 });
 
-
 const currentStatus = url.searchParams.get("status") || ""; 
 // Khi lay thuoc tinh tu dinh nghia, ta phai co dau []
 const currentButton = document.querySelector(`[button-status = "${currentStatus}"]`);
 currentButton.classList.add("active");
+
+// end filter producst
+
+
+//Search products
+
+const search = document.querySelector("[form-search]");
+search.addEventListener("submit", (event) => {
+  event.preventDefault();
+  const keyword = event.target.elements.keyword.value;
+  let url = new URL(window.location.href);
+  if(keyword){
+    url.searchParams.set("keyword", keyword);
+  }
+  else
+    url.searchParams.delete("keyword");
+  window.location.href = url.href;
+});
+
+
+
 
 
