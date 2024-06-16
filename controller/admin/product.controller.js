@@ -66,3 +66,18 @@ module.exports.index = async (req, res) => {
   });
 }
 
+module.exports.changeStatus = async (req, res) => {
+  const {id, status} = req.params;
+
+  await product.updateOne(
+    {
+      _id : id
+    }, 
+    {
+      status : status
+    }
+  );
+
+  res.redirect('back');
+};
+

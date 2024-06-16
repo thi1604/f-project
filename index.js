@@ -12,7 +12,7 @@ const database = require("./config/database.js"); // Ket noi toi database va tho
 database.connect();
 const prefixUrlAdmin = require("./config/system");
 
-app.locals.prefix = (prefixUrlAdmin).admin;
+app.locals.prefix = prefixUrlAdmin;
 
 routeClient.index(app);
 routeAdmin.index(app);

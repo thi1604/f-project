@@ -1,6 +1,2 @@
-module.exports = () => {
-  return Thi = {
-    admin : "admin"
-  }
-};
+module.exports = "admin";
 
