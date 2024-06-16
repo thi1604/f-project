@@ -28,19 +28,55 @@ currentButton.classList.add("active");
 //Search products
 
 const search = document.querySelector("[form-search]");
-search.addEventListener("submit", (event) => {
-  event.preventDefault();
-  const keyword = event.target.elements.keyword.value;
+if(search){
   let url = new URL(window.location.href);
-  if(keyword){
-    url.searchParams.set("keyword", keyword);
-  }
-  else
-    url.searchParams.delete("keyword");
-  window.location.href = url.href;
-});
+  search.addEventListener("submit", (event) => {
+    event.preventDefault(); // Ngan cho form load lai trang(Mac dinh cua form khi submit la load lai trang)
+    const keyword = event.target.elements.keyword.value; // Lay ra gia tri trong o input
+    // console.log(keyword);
+    if(keyword)
+      url.searchParams.set("keyword", keyword);
+    else
+      url.searchParams.delete("keyword");
+    window.location.href = url.href;
+  });
+}
 
 //End Search products
+
+//Pagination
+
+const listPagination = document.querySelectorAll("[num-page]"); 
+// console.log(listPagination);
+
+if(listPagination.length > 0){
+  //Check xem gia tri page ma lon hon tong so nut phan trang, neu co
+  // phai xoa gia tri page tren link va reload page
+  let url = new URL(window.location.href);
+  let numPageOnUrl = parseInt(url.searchParams.get("page"));
+  if(numPageOnUrl > listPagination.length){
+    url.searchParams.delete("page");
+    window.location.href = url.href;
+  }
+  //Bat su kien cho cac nut
+  listPagination.forEach( (item) => {
+    item.addEventListener("click", () => {
+      const pageNumCurrent = item.getAttribute("num-page");
+      if(pageNumCurrent && pageNumCurrent != "1"){
+        url.searchParams.set("page", pageNumCurrent);
+      }
+      else
+        url.searchParams.delete("page");
+      window.location.href = url.href;
+    });
+  });
+  let currPage = url.searchParams.get("page") || "";
+  if(currPage == "") currPage = "1";
+  const currButton = document.querySelector(`[num-page="${currPage}"]`);
+  currButton.classList.add("active");
+}
+
+//End pagination
 
 
 
