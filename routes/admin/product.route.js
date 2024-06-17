@@ -6,6 +6,8 @@ router.get("", controller.index);
 
 // router.get("/creat", controller.creat);
 
-router.get("/change-status/:id/:status", controller.changeStatus);
+router.patch("/change-status/:id/:status", controller.changeStatus);
+
+router.patch("/change-many-status", controller.changeManyStatus);
 
 module.exports = router;

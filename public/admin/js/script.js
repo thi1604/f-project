@@ -79,5 +79,101 @@ if(listPagination.length > 0){
 //End pagination
 
 
+// Change Status Item
+
+const listButton = document.querySelectorAll("[button-change-status]");
+
+if(listButton.length > 0){
+  listButton.forEach((item) => {
+    item.addEventListener("click", () => {
+      const link = item.getAttribute("link");
+      //Call api voi phuong thuc la patch
+      fetch(link, {
+        method : "PATCH",
+        headers: {
+          "Content-Type": "application/json",
+        }
+      })
+        // Tra ve cho FE data dang json, roi dich json thanh js
+        .then(res => res.json())
+        //Dich xong tra gia tri cho data, neu thanh cong reload lai trang
+        .then(data => {
+          if(data.code == 200){
+            window.location.reload();
+          }
+        });
+    });
+  });
+}
+
+
+//Choose checkbox for change status all item
+
+const changeAll = document.querySelector(`input[change-status-all]`);
+const listItem = document.querySelectorAll(`input[change-status-item]`);
+if(changeAll){
+  changeAll.addEventListener("click", ()=>{
+    const check = changeAll.checked;
+    listItem.forEach((item)=>{
+      item.checked = check;
+    });
+  });
+}
+
+//End Choose checkbox for change status all item
+
+//Check all item. If true, changeAll has checked = true
+const lengthAll = listItem.length;
+
+listItem.forEach(item => {
+  item.addEventListener("click", ()=> {
+    const checkedListItem = document.querySelectorAll(`input[change-status-item]:checked`);
+    if(lengthAll == checkedListItem.length){
+      changeAll.checked = true;
+    }
+    else
+      changeAll.checked = false;
+  });
+});
+
+//Change many Item from checkbox
+const divActive = document.querySelector("div[change-many-items]");
+if(divActive){
+  const select = divActive.querySelector("select");
+  const button = divActive.querySelector("button");
+  // const checkedListItem = document.querySelectorAll(`input[change-status-item]:checked`);
+  button.addEventListener("click", () => {
+    const checkedListItem = document.querySelectorAll(`input[change-status-item]:checked`);
+    const ids = [];
+    if(select.value != "" && checkedListItem.length > 0){
+      checkedListItem.forEach((item) => {
+        ids.push(item.getAttribute("value"));
+      });
+
+      const dataChange = {
+        ids : ids,
+        status : select.value
+      }
+
+      fetch("/admin/product/change-many-status", {
+        method : "PATCH",
+        headers: {
+          "Content-Type": "application/json",
+        }, 
+        body: JSON.stringify(dataChange)
+      })
+        .then(res => res.json())
+        .then(data => {
+          if(data.code == 200)
+            window.location.reload();
+        })
+    } 
+    else
+      alert("Loi");
+  });
+}
+
+
+
 
 

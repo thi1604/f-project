@@ -7,7 +7,8 @@ const port = process.env.PORT;
 app.set("views", "./views"); // Nhung folder views vao project
 app.set("views engine", "pug"); // Khai bao type template engine
 app.use(express.static('public')); // Nhung folder FE vao project
-
+const bodyParser = require("body-parser");
+app.use(bodyParser.json());
 const database = require("./config/database.js"); // Ket noi toi database va thong bao
 database.connect();
 const prefixUrlAdmin = require("./config/system");

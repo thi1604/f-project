@@ -14,11 +14,27 @@ block main
         .col-6
           +search(keyword)
   .card.mb-3
+    .card-header Hành động
+    .card-body
+      div(change-many-items)
+        .input-group
+          select()
+            option(value='') Choose...
+            option(value='active') Hoạt động 
+            option(value='inactive') Dừng hoạt động
+          .input-group-append
+            button.btn.btn-outline-secondary(type='button') Áp dụng
+  .card.mb-3
     .card-header Danh sách
     .card-body
       table.table.table-hover.table-sm
         thead
           tr
+            th
+              input(
+                type="checkbox"
+                change-status-all
+              )
             th STT
             th Hình ảnh
             th Tiêu đề
@@ -28,7 +44,13 @@ block main
 
         tbody
           for item, index in listProducts
-            tr 
+            tr
+              td
+                input(
+                type="checkbox"
+                change-status-item
+                value = item.id 
+              ) 
               td #{index + 1}
               td
                 img(
@@ -41,14 +63,16 @@ block main
               td #{item.price}$
               td
                 if(item.status == 'active')
-                  a(
-                    href=`/admin/product/change-status/${item.id}/inactive`
+                  button(
+                    link =`/${prefix}/product/change-status/${item.id}/inactive`
                     class="badge badge-success"
+                    button-change-status
                   ) Hoạt động 
                 else 
-                  a(
-                    href=`/admin/product/change-status/${item.id}/active` 
+                  button(
+                    link =`/${prefix}/product/change-status/${item.id}/active` 
                     class="badge badge-danger"
+                    button-change-status 
                   ) Dừng hoạt động 
               td
                 button(class="btn btn-warning btn-sm") Sửa

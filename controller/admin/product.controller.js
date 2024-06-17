@@ -67,6 +67,7 @@ module.exports.index = async (req, res) => {
 }
 
 module.exports.changeStatus = async (req, res) => {
+  //req.params lay cac gia tri dong trong cai link, tra ve ob
   const {id, status} = req.params;
 
   await product.updateOne(
@@ -77,7 +78,26 @@ module.exports.changeStatus = async (req, res) => {
       status : status
     }
   );
+  //Tra data ve cho FE, code duoi tra ve 1 ob 
+  res.json({
+    code : 200
+  });
+};
 
-  res.redirect('back');
+module.exports.changeManyStatus = async (req, res) => {
+  
+  const {ids, status} = req.body;
+
+  await product.updateMany(
+    {
+      _id : ids
+    }, 
+    {
+      status : status
+    }
+  );
+  res.json({
+    code : 200
+  });
 };
 
