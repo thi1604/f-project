@@ -71,14 +71,27 @@ module.exports.changeManyStatus = async (req, res) => {
   
   const {ids, status} = req.body;
 
-  await product.updateMany(
-    {
-      _id : ids
-    }, 
-    {
-      status : status
-    }
-  );
+  if(status == "delete"){
+    await product.updateMany(
+      {
+        _id : ids
+      },
+      {
+        deleted: true
+      }
+    )
+  }
+  else{
+    await product.updateMany(
+      {
+        _id : ids
+      },
+      {
+        status: status
+      }
+    )
+  }
+  
   res.json({
     code : 200
   });
