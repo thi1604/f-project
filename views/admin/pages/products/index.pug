@@ -33,6 +33,7 @@ block main
             th Hình ảnh
             th Tiêu đề
             th Giá
+            th Vị trí
             th Trạng thái
             th Hành động
 
@@ -55,6 +56,15 @@ block main
                 )
               td #{item.title}
               td #{item.price}$
+              td
+                input(
+                  type="number"
+                  style = "width : 60px"
+                  change-position
+                  link-id-item = `/${prefix}/product/change-position/${item.id}`
+                  value = `${item.position}`
+                  min = 1
+                )
               td
                 if(item.status == 'active')
                   button(

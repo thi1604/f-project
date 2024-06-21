@@ -10,5 +10,6 @@ router.patch("/change-status/:id/:status", controller.changeStatus);
 
 router.patch("/change-many-status", controller.changeManyStatus);
 router.patch("/delete/:id", controller.deleteItem);
+router.patch("/change-position/:id", controller.changePosition);
 
 module.exports = router;

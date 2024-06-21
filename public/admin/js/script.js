@@ -193,6 +193,33 @@ if(listButtonDelete.length > 0){
 }
 // End Delete item
 
+// Change Position
+const listPosition = document.querySelectorAll("[change-position]");
+if(listPosition.length > 0){
+    listPosition.forEach((item)=>{
+      item.addEventListener("change", ()=>{
+        const link = item.getAttribute("link-id-item");
+        const newPos = item.value;
+        fetch(link, {
+          method : "PATCH",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body : JSON.stringify({
+            newPos : newPos
+          })
+        })
+        .then(res => res.json())
+        .then(data => {
+          if(data.code == 200)
+            console.log("ok");
+        })
+      });
+    });
+}
+// End Change Position
+
+
 
 
 

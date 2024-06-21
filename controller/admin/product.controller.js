@@ -36,7 +36,11 @@ module.exports.index = async (req, res) => {
   //Lay ham phan trang tu folder helper
   const pagination = await Pagination(req, filter);
   //Lay san pham ra theo trang
-  const Product = await product.find(filter).limit(pagination.limitItems).skip(pagination.skip);
+  const Product = await 
+  product.find(filter)
+  .limit(pagination.limitItems)
+  .skip(pagination.skip)
+  .sort({position : 'desc'});
   
   // Choc vao database lay data theo thang filter
   // const Product = await product.find(filter);
@@ -91,7 +95,7 @@ module.exports.changeManyStatus = async (req, res) => {
       }
     )
   }
-  
+
   res.json({
     code : 200
   });
@@ -110,6 +114,23 @@ module.exports.deleteItem = async (req, res) => {
       deleted : true
     }
   );
+  res.json({
+    code : 200
+  });
+};
+
+module.exports.changePosition = async (req, res) => {
+  const newPos = parseInt(req.body.newPos);
+  const id = req.params.id;
+  
+  await product.updateOne({
+    _id: id
+  },
+  {
+    position: newPos
+  }
+  )
+  
   res.json({
     code : 200
   });

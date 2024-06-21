@@ -4,7 +4,7 @@ module.exports.index = async (req, res) => {
     const listProduct = await Product.find({
         status: "active",
         deleted: false
-    });
+    }).sort({position : "desc"});
     res.render("client/pages/product/index.pug", {
         pageTitle: "Trang sp",
         products: listProduct
