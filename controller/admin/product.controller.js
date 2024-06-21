@@ -1,4 +1,5 @@
 const product = require("../../models/product.model");
+const Pagination = require("../../helper/pagination.helper");
 
 module.exports.index = async (req, res) => {
   const filter = {
@@ -32,26 +33,8 @@ module.exports.index = async (req, res) => {
       status : "inactive"
     }
 ];
-
-  //Tao object cho trang thai pagination
-  const pagination = {
-    limitItems : 4,
-    currentPage : 1 //Mac dinh la trang 1
-  };
-
-  //Tim trang hien tai
-  const page = req.query.page;
-  if(page){
-    pagination.currentPage = parseInt(page); //Can chuyen ve number, vi req.query.page tra ve string
-  }
-  //Bo qua cac san pham theo so trang theo cong thuc
-  pagination.skip = (pagination.currentPage - 1) * pagination.limitItems;
-
-  //Tinh tong so san pham render ra giao dien
-  const totalPage = await product.countDocuments(filter);
-  if(totalPage == 0) pagination.currentPage = 0;
-  //Tinh so trang can dung
-  pagination.totalPage = Math.ceil(totalPage / pagination.limitItems);
+  //Lay ham phan trang tu folder helper
+  const pagination = await Pagination(req, filter);
   //Lay san pham ra theo trang
   const Product = await product.find(filter).limit(pagination.limitItems).skip(pagination.skip);
   
@@ -94,6 +77,24 @@ module.exports.changeManyStatus = async (req, res) => {
     }, 
     {
       status : status
+    }
+  );
+  res.json({
+    code : 200
+  });
+};
+
+module.exports.deleteItem = async (req, res) => {
+  
+  const id = req.params.id;   //res.params tra ve 1 ob chua cac bien dong tren url
+  console.log(id);
+
+  await product.updateOne(
+    {
+      _id : id
+    }, 
+    {
+      deleted : true
     }
   );
   res.json({

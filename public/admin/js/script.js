@@ -154,8 +154,8 @@ if(divActive){
         ids : ids,
         status : select.value
       }
-
-      fetch("/admin/product/change-many-status", {
+      const link = divActive.getAttribute("link");
+      fetch(link, {
         method : "PATCH",
         headers: {
           "Content-Type": "application/json",
@@ -172,6 +172,26 @@ if(divActive){
       alert("Loi");
   });
 }
+
+// Delete item
+const listButtonDelete = document.querySelectorAll("[link-id-button]");
+if(listButtonDelete.length > 0){
+  listButtonDelete.forEach((item) => {
+    item.addEventListener("click", ()=> {
+      const link = item.getAttribute("link-id-button");
+      console.log(link);
+      fetch(link, {
+        method: "PATCH"
+      })
+        .then(res => res.json())
+        .then(data => {
+          if(data.code == 200)
+            window.location.reload();
+      })
+    });
+  });
+}
+// End Delete item
 
 
 
