@@ -1,4 +1,4 @@
-mixin box-actions(link)
+mixin box-actions(link, listActions)
   div(
     change-many-items
     link = link
@@ -6,8 +6,7 @@ mixin box-actions(link)
     .input-group
       select()
         option(value='') Choose...
-        option(value='active') Hoạt động 
-        option(value='inactive') Dừng hoạt động
-        option(value='delete') Xóa
+        for item in listActions
+          option(value= `${item.status}`) #{item.label}
       .input-group-append
         button.btn.btn-outline-secondary(type='button') Áp dụng

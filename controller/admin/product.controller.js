@@ -32,7 +32,17 @@ module.exports.index = async (req, res) => {
       label : "Dừng hoạt động",
       status : "inactive"
     }
-];
+  ];
+  const listActions = [
+    {
+      label : "Hoạt động",
+      status : "active"
+    },
+    {
+      label : "Dừng hoạt động",
+      status : "inactive"
+    }
+  ];
   //Lay ham phan trang tu folder helper
   const pagination = await Pagination(req, filter);
   //Lay san pham ra theo trang
@@ -49,6 +59,7 @@ module.exports.index = async (req, res) => {
     listProducts: Product,
     keyword: keyword,
     listFilter : listFilter,
+    listActions : listActions,
     pagination : pagination // Truyen object pagination cho de truy cap ben file pug
   });
 }
@@ -104,8 +115,6 @@ module.exports.changeManyStatus = async (req, res) => {
 module.exports.deleteItem = async (req, res) => {
   
   const id = req.params.id;   //res.params tra ve 1 ob chua cac bien dong tren url
-  console.log(id);
-
   await product.updateOne(
     {
       _id : id

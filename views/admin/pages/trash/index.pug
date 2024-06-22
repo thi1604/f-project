@@ -4,8 +4,9 @@ include ../../mixins/search.pug
 include ../../mixins/pagination.pug
 include ../../mixins/box-actions.pug
 
+
 block main 
-  h1(class="mb-4") Quản lý sản phẩm
+  h1(class="mb-4") Thùng rác
   .card.mb-3
     .card-header Bộ lọc và Tìm kiếm
     .card-body
@@ -17,7 +18,7 @@ block main
   .card.mb-3
     .card-header Hành động
     .card-body
-      +box-actions(`/${prefix}/product/change-many-status`, listActions)
+      +box-actions(`/${prefix}/trash`, listActions)
   .card.mb-3
     .card-header Danh sách
     .card-body
@@ -60,31 +61,30 @@ block main
                 input(
                   type="number"
                   style = "width : 60px"
-                  change-position
                   link-id-item = `/${prefix}/product/change-position/${item.id}`
                   value = `${item.position}`
-                  min = 1
                 )
               td
                 if(item.status == 'active')
                   button(
                     link =`/${prefix}/product/change-status/${item.id}/inactive`
                     class="badge badge-success"
-                    button-change-status
                   ) Hoạt động 
                 else 
                   button(
                     link =`/${prefix}/product/change-status/${item.id}/active` 
                     class="badge badge-danger"
-                    button-change-status 
                   ) Dừng hoạt động 
               td
                 button(
                   class="btn btn-warning btn-sm"
-                ) Sửa
+                  restore-item
+                  link-id-button-trash = `/${prefix}/trash/restore/${item.id}`
+                ) Khôi phục
                 button(
                   class="btn btn-danger btn-sm ml-1"
-                  link-id-button = `/${prefix}/product/delete/${item.id}` 
-                ) Xóa
-
+                  permanently-deleted
+                  link-id-button-trash = `/${prefix}/trash/permanently-deleted/${item.id}`
+                ) Xóa vĩnh viễn
     +pagination(pagination)
+    
