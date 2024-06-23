@@ -33,6 +33,7 @@ if(search){
   let url = new URL(window.location.href);
   search.addEventListener("submit", (event) => {
     event.preventDefault(); // Ngan cho form load lai trang(Mac dinh cua form khi submit la load lai trang)
+    url.searchParams.delete("page"); //Neu loc trang thai san pham, mac dinh show tu trang 1 
     const keyword = event.target.elements.keyword.value; // Lay ra gia tri trong o input
     // console.log(keyword);
     if(keyword)
