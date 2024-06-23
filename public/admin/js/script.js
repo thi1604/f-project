@@ -7,6 +7,7 @@ let url = new URL(window.location.href);
 listProducts.forEach((item)=>{
   item.addEventListener("click", ()=>{
     const status = item.getAttribute("button-status");
+    url.searchParams.delete("page"); //Neu loc trang thai san pham, mac dinh show tu trang 1 
     if(status != ""){
       url.searchParams.set("status", status);
     }
