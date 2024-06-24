@@ -271,6 +271,18 @@ if(listButtonDeletePer.length > 0){
 }
 // End Xoa vinh vien
 
+// An thong bao khi thay doi trang thai san pham
+const hidden = document.querySelector("[show-alert]");
+if(hidden){
+  let time = hidden.getAttribute("show-alert") || 3000;
+  time = parseInt(time);
+  setTimeout(()=>{
+    hidden.classList.add("hidden");
+  }, time);
+}
+// End an thong bao khi thay doi trang thai san pham
+
+
 
 
 

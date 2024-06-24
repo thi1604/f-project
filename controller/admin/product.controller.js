@@ -76,6 +76,7 @@ module.exports.changeStatus = async (req, res) => {
       status : status
     }
   );
+  req.flash('success', 'Cập nhật thành công!');
   //Tra data ve cho FE, code duoi tra ve 1 ob 
   res.json({
     code : 200
@@ -107,6 +108,8 @@ module.exports.changeManyStatus = async (req, res) => {
     )
   }
 
+  req.flash('success', 'Cập nhật thành công!');
+
   res.json({
     code : 200
   });
@@ -123,6 +126,9 @@ module.exports.deleteItem = async (req, res) => {
       deleted : true
     }
   );
+
+  req.flash('success', 'Xoá thành công!');
+    
   res.json({
     code : 200
   });
