@@ -9,6 +9,7 @@ app.set("views engine", "pug"); // Khai bao type template engine
 app.use(express.static('public')); // Nhung folder FE vao project
 const bodyParser = require("body-parser");
 app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: false })); //Su dung cho form
 const database = require("./config/database.js"); // Ket noi toi database va thong bao
 database.connect();
 const prefixUrlAdmin = require("./config/system");

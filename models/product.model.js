@@ -1,4 +1,7 @@
 const mongoose = require("mongoose");
+const slug = require('mongoose-slug-updater');
+mongoose.plugin(slug);
+
 
 const productSchema = new mongoose.Schema({
   title: String,
@@ -9,7 +12,17 @@ const productSchema = new mongoose.Schema({
   thumbnail: String,
   status: String,
   position: Number,
-  deleted: Boolean
+  deleted: {
+    type: Boolean,
+    default: false
+  },
+  slug: { //Check va update tu dong khi trung title(neu trung se sinh ra 1 chuoi random duy nhat)
+    type: String,
+    slug: "title",
+    unique: true
+  }
+},{
+  timestamps : true //Tu dong update lai time khi creat va chinh sua
 });
 
 const product = mongoose.model("Product", productSchema, "products");

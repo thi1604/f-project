@@ -156,6 +156,7 @@ if(divActive){
         ids : ids,
         status : select.value
       }
+      console.log(dataChange);
       const link = divActive.getAttribute("link");
       fetch(link, {
         method : "PATCH",
@@ -264,8 +265,6 @@ if(listButtonDeletePer.length > 0){
             window.location.reload();
         })
       }
-      
-
     });
   });
 }

@@ -1,5 +1,6 @@
 const product = require("../../models/product.model");
 const Pagination = require("../../helper/pagination.helper");
+const system = require("../../config/system");
 
 module.exports.index = async (req, res) => {
   const filter = {
@@ -149,5 +150,27 @@ module.exports.changePosition = async (req, res) => {
   res.json({
     code : 200
   });
+};
+
+module.exports.create = async (req, res) => {
+  res.render("admin/pages/products/create.pug",{ //Khi render file pug phai ghi .pug vao duoi file
+    pageTitle: "Thêm mới sản phẩm"
+  });
+};
+
+module.exports.createPost = async (req, res) => {
+  req.body.price = parseInt(req.body.price);
+  req.body.discountPercentage = parseInt(req.body.discountPercentage);
+  req.body.stock = parseInt(req.body.stock);
+  let position = req.body.position;
+  if(position){
+    req.body.position = parseInt(position);
+  }
+  else
+    position = await product.countDocuments();
+  req.body.position = position + 1;
+  const newItem = new product(req.body);
+  await newItem.save();
+  res.redirect('/admin/product');
 };
 

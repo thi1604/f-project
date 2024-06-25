@@ -67,7 +67,7 @@ module.exports.restore = async(req, res) => {
   {
     deleted : false
   });
-
+  req.flash('success', 'Khôi phục thành công!');
   res.json({
     code : 200
   })
@@ -79,7 +79,29 @@ module.exports.permanentlyDeleted = async(req, res) => {
   await product.deleteOne({
     _id : id
   });
+  req.flash('success', 'Xóa thành công!');
+  res.json({
+    code : 200
+  })
+}
 
+module.exports.changeManyItem= async(req, res) => {
+  const {ids, status} = req.body;
+
+  if(status == "restore"){
+    await product.updateMany({
+      _id : ids
+    }, 
+    {
+      deleted: false
+    });
+  }
+  else{
+    await product.deleteMany({
+      _id: ids
+    });
+  }
+  req.flash('success', 'Khôi phục thành công!');
   res.json({
     code : 200
   })

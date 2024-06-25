@@ -5,12 +5,6 @@ include ../../mixins/pagination.pug
 include ../../mixins/box-actions.pug
 
 block main 
-  - var messages = getMessages()
-  if (messages.success)
-    div(
-      class = "alert alert-success show-alert"
-      show-alert="1500"
-    ) #{messages.success}
   h1(class="mb-4") Quản lý sản phẩm
   .card.mb-3
     .card-header Bộ lọc và Tìm kiếm
@@ -27,6 +21,11 @@ block main
   .card.mb-3
     .card-header Danh sách
     .card-body
+      div(class="text-right mb-2")
+        a(
+          href=`/${prefix}/product/create`
+          class="btn btn-outline-success"
+        ) + Thêm mới
       table.table.table-hover.table-sm
         thead
           tr

@@ -5,7 +5,7 @@ include ../../mixins/pagination.pug
 include ../../mixins/box-actions.pug
 
 
-block main 
+block main
   h1(class="mb-4") Thùng rác
   .card.mb-3
     .card-header Bộ lọc và Tìm kiếm
@@ -18,7 +18,7 @@ block main
   .card.mb-3
     .card-header Hành động
     .card-body
-      +box-actions(`/${prefix}/trash`, listActions)
+      +box-actions(`/${prefix}/trash/change-many-item`, listActions)
   .card.mb-3
     .card-header Danh sách
     .card-body
