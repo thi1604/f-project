@@ -6,6 +6,7 @@ block main
   form(
     action=`/${prefix}/product/create`
     method="POST"
+    enctype="multipart/form-data"
   )
     div(class="form-group")
       label(for="title") Tiêu đề
@@ -54,13 +55,23 @@ block main
         value="0"
         min="0"
       )
-    div(class="form-group")
+    div(
+      class="form-group"
+      upload-image 
+    )
       label(for="thumbnail") Ảnh
       input(
-        type="text"
-        class="form-control"
+        type="file"
+        class="form-control-file"
         id="thumbnail"
+        upload-image-input
         name="thumbnail"
+        accept = "image/*" 
+      )
+      img(
+        class = "image-preview"
+        upload-image-preview
+        src=""
       )
     div(class="form-group")
       label(for="position") Vị trí

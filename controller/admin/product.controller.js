@@ -2,6 +2,7 @@ const product = require("../../models/product.model");
 const Pagination = require("../../helper/pagination.helper");
 const system = require("../../config/system");
 
+
 module.exports.index = async (req, res) => {
   const filter = {
     deleted : false // Lay data tu modul theo object filter
@@ -159,6 +160,10 @@ module.exports.create = async (req, res) => {
 };
 
 module.exports.createPost = async (req, res) => {
+  if(req.file && req.file.filename){
+    req.body.thumbnail = `/uploads/${req.file.filename}`;
+  }// Kiem tra xem file anh dc upload? gan phuong thuc thumbnail=req.file.filename:null
+
   req.body.price = parseInt(req.body.price);
   req.body.discountPercentage = parseInt(req.body.discountPercentage);
   req.body.stock = parseInt(req.body.stock);

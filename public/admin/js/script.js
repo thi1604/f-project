@@ -21,7 +21,8 @@ listProducts.forEach((item)=>{
 const currentStatus = url.searchParams.get("status") || ""; 
 // Khi lay thuoc tinh tu dinh nghia, ta phai co dau []
 const currentButton = document.querySelector(`[button-status = "${currentStatus}"]`);
-currentButton.classList.add("active");
+if(currentButton)
+  currentButton.classList.add("active");
 
 // end filter producst
 
@@ -280,6 +281,25 @@ if(hidden){
   }, time);
 }
 // End an thong bao khi thay doi trang thai san pham
+
+
+// preview anh trong form ben admin
+
+const divImage = document.querySelector("[upload-image]");
+if(divImage){
+  const imageInput = divImage.querySelector("[upload-image-input]"); 
+  const imagePreview = divImage.querySelector("[upload-image-preview]");
+  if(imageInput){
+    imageInput.addEventListener("change", ()=>{
+      const file = imageInput.files[0];
+      if(file){
+        imagePreview.src = URL.createObjectURL(file);
+      }
+    });
+  } 
+}
+
+// End preview anh trong form ben admin
 
 
 
