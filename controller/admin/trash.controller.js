@@ -89,6 +89,7 @@ module.exports.changeManyItem= async(req, res) => {
   const {ids, status} = req.body;
 
   if(status == "restore"){
+    req.flash('success', 'Khôi phục thành công!');
     await product.updateMany({
       _id : ids
     }, 
@@ -97,11 +98,11 @@ module.exports.changeManyItem= async(req, res) => {
     });
   }
   else{
+    req.flash('success', 'Xóa thành công!');
     await product.deleteMany({
       _id: ids
     });
   }
-  req.flash('success', 'Khôi phục thành công!');
   res.json({
     code : 200
   })

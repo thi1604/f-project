@@ -160,6 +160,7 @@ module.exports.create = async (req, res) => {
 };
 
 module.exports.createPost = async (req, res) => {
+  req.flash('success', 'Tạo mới thành công');
   if(req.file && req.file.filename){
     req.body.thumbnail = `/uploads/${req.file.filename}`;
   }// Kiem tra xem file anh dc upload? gan phuong thuc thumbnail=req.file.filename:null

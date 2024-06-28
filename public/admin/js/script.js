@@ -274,6 +274,7 @@ if(listButtonDeletePer.length > 0){
 // An thong bao khi thay doi trang thai san pham
 const hidden = document.querySelector("[show-alert]");
 if(hidden){
+  console.log(hidden);
   let time = hidden.getAttribute("show-alert") || 3000;
   time = parseInt(time);
   setTimeout(()=>{

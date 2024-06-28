@@ -1,5 +1,6 @@
 const express = require("express");
 const router = express.Router();
+const Alert = require("../../validates/admin/products.validates");
 const controller = require("../../controller/admin/product.controller");
 
 router.get("", controller.index);
@@ -14,6 +15,12 @@ router.get("/create", controller.create);
 const Storage = require("../../helper/uploadsMulter.helper");
 const multer  = require('multer');
 const upload = multer({ storage: Storage.storage });
-router.post("/create", upload.single('thumbnail'), controller.createPost);
+
+router.post(
+  "/create",
+  upload.single('thumbnail'), // Lenh nay phai dung ngay sau route, neu sai express tra ve {}
+  Alert.alert, // Lam phan gui req.flash cho FE(tra ve 1 object)
+ controller.createPost
+);
 
 module.exports = router;
