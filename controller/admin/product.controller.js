@@ -180,3 +180,38 @@ module.exports.createPost = async (req, res) => {
   res.redirect('/admin/product');
 };
 
+
+module.exports.edit = async (req, res) => {
+  const id = req.params.id;
+  const item = await product.findOne({
+    _id : id
+  });
+  
+  res.render("admin/pages/products/edit.pug", {
+    pageTitle: "Trang chỉnh sửa sp",
+    product: item
+  });
+}
+
+module.exports.editPatch = async (req, res) => {
+  const id = req.params.id;
+  req.flash('success', 'Đã cập nhật');
+  if(req.file && req.file.filename){
+    req.body.thumbnail = req.file.filename;
+  }
+  req.body.price = parseInt(req.body.price);
+  req.body.discountPercentage = parseInt(req.body.discountPercentage);
+  req.body.stock = parseInt(req.body.stock);
+  let position = req.body.position;
+  if(!position){
+    position = await product.countDocuments({});
+    req.body.position = parseInt(position) + 1;
+  }
+  else
+    req.body.position = parseInt(position);
+
+  await product.updateOne({
+    _id : id
+  }, req.body);
+  res.redirect('back');
+}

@@ -19,6 +19,11 @@ const cookieParser = require('cookie-parser');
 const session = require('express-session');
 // End nhung flash-message
 
+//Nhung cac phuong thuc khac cho form(mac dinh form co get va post)
+const methodOverride = require('method-override');
+app.use(methodOverride('_method'));
+//End nhung cac phuong thuc khac cho form(mac dinh form co get va post)
+
 app.use(cookieParser('ThiBeo'));
 app.use(session({ cookie: { maxAge: 60000 }}));
 app.use(flash());
