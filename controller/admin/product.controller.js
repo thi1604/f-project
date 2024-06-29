@@ -68,58 +68,66 @@ module.exports.index = async (req, res) => {
 }
 
 module.exports.changeStatus = async (req, res) => {
-  //req.params lay cac gia tri dong trong cai link, tra ve ob
-  const {id, status} = req.params;
+  
+  try{
+    //req.params lay cac gia tri dong trong cai link, tra ve ob
+    const {id, status} = req.params;
 
-  await product.updateOne(
-    {
-      _id : id
-    }, 
-    {
-      status : status
-    }
-  );
-  req.flash('success', 'Cập nhật thành công!');
-  //Tra data ve cho FE, code duoi tra ve 1 ob 
-  res.json({
-    code : 200
-  });
+    await product.updateOne(
+      {
+        _id : id
+      }, 
+      {
+        status : status
+      }
+    );
+    req.flash('success', 'Cập nhật thành công!');
+    res.json({
+      code: 200
+    });
+    //Tra data ve cho FE, code duoi tra ve 1 ob 
+  }catch(error){
+    res.redirect(`/${prefix}/product`);
+  }
 };
 
 module.exports.changeManyStatus = async (req, res) => {
   
   const {ids, status} = req.body;
-
-  if(status == "delete"){
-    await product.updateMany(
-      {
-        _id : ids
-      },
-      {
-        deleted: true
-      }
-    )
+  try{
+    if(status == "delete"){
+      await product.updateMany(
+        {
+          _id : ids
+        },
+        {
+          deleted: true
+        }
+      )
+    }
+    else{
+      await product.updateMany(
+        {
+          _id : ids
+        },
+        {
+          status: status
+        }
+      )
+    }
+  
+    req.flash('success', 'Cập nhật thành công!');
+  
+    res.json({
+      code : 200
+    });
+  }catch(error){
+    res.redirect(`/${prefix}/product`);
   }
-  else{
-    await product.updateMany(
-      {
-        _id : ids
-      },
-      {
-        status: status
-      }
-    )
-  }
-
-  req.flash('success', 'Cập nhật thành công!');
-
-  res.json({
-    code : 200
-  });
 };
 
 module.exports.deleteItem = async (req, res) => {
-  
+  try{
   const id = req.params.id;   //res.params tra ve 1 ob chua cac bien dong tren url
   await product.updateOne(
     {
@@ -135,23 +143,33 @@ module.exports.deleteItem = async (req, res) => {
   res.json({
     code : 200
   });
+  }catch(error){
+    res.json({
+      code : 200
+    });
+  }
 };
 
 module.exports.changePosition = async (req, res) => {
-  const newPos = parseInt(req.body.newPos);
-  const id = req.params.id;
-  
-  await product.updateOne({
-    _id: id
-  },
-  {
-    position: newPos
+  try{
+    const newPos = parseInt(req.body.newPos);
+    const id = req.params.id;
+    
+    await product.updateOne({
+      _id: id
+    },
+    {
+      position: newPos
+    }
+    )
+    res.json({
+      code : 200
+    });
+  }catch(error){
+    res.json({
+      code : 200
+    });
   }
-  )
-  
-  res.json({
-    code : 200
-  });
 };
 
 module.exports.create = async (req, res) => {
@@ -183,20 +201,23 @@ module.exports.createPost = async (req, res) => {
 
 
 module.exports.edit = async (req, res) => {
-  const id = req.params.id;
-  const item = await product.findOne({
-    _id : id
-  });
-  
-  res.render("admin/pages/products/edit.pug", {
-    pageTitle: "Trang chỉnh sửa sp",
-    product: item
-  });
+  try{
+    const id = req.params.id;
+    const item = await product.findOne({
+      _id : id
+    });
+    
+    res.render("admin/pages/products/edit.pug", {
+      pageTitle: "Trang chỉnh sửa sp",
+      product: item
+    });
+  }catch{
+    res.redirect(`/${prefix}/product`);
+  }
 }
 
 module.exports.editPatch = async (req, res) => {
   const id = req.params.id;
-  req.flash('success', 'Đã cập nhật');
   if(req.file && req.file.filename){
     req.body.thumbnail = req.file.filename;
   }
@@ -210,11 +231,18 @@ module.exports.editPatch = async (req, res) => {
   }
   else
     req.body.position = parseInt(position);
-
-  await product.updateOne({
-    _id : id
-  }, req.body);
-  res.redirect('back');
+  try{
+    await product.updateOne({
+      _id : id
+    }, req.body);
+    req.flash('success', 'Đã cập nhật');
+    res.redirect('back');
+  }
+  catch(error){
+    req.flash('error', 'Lỗi!');
+    res.redirect(`/${prefix}/product/edit/:id`);
+  }
+  
 }
 
 module.exports.detail = async (req, res)=>{
@@ -222,7 +250,7 @@ module.exports.detail = async (req, res)=>{
   const item = await product.find({
     _id : id
   });
-  
+
   res.render(`${prefix}/pages/products/detail.pug`,{
     pageTitle: "Chi tiết sản phẩm",
     product : item[0]
