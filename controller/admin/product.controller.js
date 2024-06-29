@@ -1,6 +1,7 @@
 const product = require("../../models/product.model");
 const Pagination = require("../../helper/pagination.helper");
 const system = require("../../config/system");
+const prefix = require("../../config/system");
 
 
 module.exports.index = async (req, res) => {
@@ -214,4 +215,16 @@ module.exports.editPatch = async (req, res) => {
     _id : id
   }, req.body);
   res.redirect('back');
+}
+
+module.exports.detail = async (req, res)=>{
+  const id = req.params.id;
+  const item = await product.find({
+    _id : id
+  });
+  
+  res.render(`${prefix}/pages/products/detail.pug`,{
+    pageTitle: "Chi tiết sản phẩm",
+    product : item[0]
+  });
 }
