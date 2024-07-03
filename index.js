@@ -4,10 +4,13 @@ const routeClient = require("./routes/client/index.route.js"); //Nhung folder ro
 const routeAdmin = require("./routes/admin/index.route.js"); //Nhung folder route va di toi route cua trang client
 require('dotenv').config(); // Cau hinh file .env
 const port = process.env.PORT; 
-app.set("views", `${__dirname}/views`); // Nhung folder views vao project
-app.set("views engine", "pug"); // Khai bao type template engine
+
+app.set('views', `${__dirname}/views`); // Nhung folder views vao project
+app.set('views engine', 'pug'); // Khai bao type template engine
+
 app.use(express.static(`${__dirname}/public`)); // Nhung folder FE vao project
-const bodyParser = require("body-parser");
+
+const bodyParser = require('body-parser');
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false })); //Su dung cho form
 const database = require("./config/database.js"); // Ket noi toi database va thong bao
