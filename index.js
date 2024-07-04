@@ -17,7 +17,7 @@ const database = require("./config/database.js"); // Ket noi toi database va tho
 database.connect();
 const prefixUrlAdmin = require("./config/system");
 //Nhung thu vien flash-message vao express(2 dong 17-18 khong con tich hop san trong express, phai nhung vao)
-const  flash = require('express-flash-messages');
+const  flash = require('express-flash');
 const cookieParser = require('cookie-parser');
 const session = require('express-session');
 // End nhung flash-message
