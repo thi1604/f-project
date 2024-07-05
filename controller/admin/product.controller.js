@@ -180,10 +180,9 @@ module.exports.create = async (req, res) => {
 
 module.exports.createPost = async (req, res) => {
   req.flash('success', 'Tạo mới thành công');
-  if(req.file && req.file.filename){
-    req.body.thumbnail = `/uploads/${req.file.filename}`;
-  }// Kiem tra xem file anh dc upload? gan phuong thuc thumbnail=req.file.filename:null
-
+  // if(req.file && req.file.filename){
+  //   req.body.thumbnail = `/uploads/${req.file.filename}`;
+  // }// Kiem tra xem file anh dc upload? gan phuong thuc thumbnail=req.file.filename:null
   req.body.price = parseInt(req.body.price);
   req.body.discountPercentage = parseInt(req.body.discountPercentage);
   req.body.stock = parseInt(req.body.stock);
@@ -218,9 +217,9 @@ module.exports.edit = async (req, res) => {
 
 module.exports.editPatch = async (req, res) => {
   const id = req.params.id;
-  if(req.file && req.file.filename){
-    req.body.thumbnail = req.file.filename;
-  }
+  // if(req.file && req.file.filename){
+  //   req.body.thumbnail = req.file.filename;
+  // }
   req.body.price = parseInt(req.body.price);
   req.body.discountPercentage = parseInt(req.body.discountPercentage);
   req.body.stock = parseInt(req.body.stock);
@@ -235,7 +234,7 @@ module.exports.editPatch = async (req, res) => {
     await product.updateOne({
       _id : id
     }, req.body);
-    req.flash('success', 'Đã cập nhật');
+    req.flash('success', 'Đã cập nhật!');
     res.redirect('back');
   }
   catch(error){
