@@ -46,14 +46,22 @@ module.exports.index = async (req, res) => {
       status : "inactive"
     }
   ];
+  const sort = {};
+  if(req.query.sortKey && req.query.sortValue){
+    sort[req.query.sortKey] = req.query.sortValue;
+  }
+  else{
+    sort.position = 'desc'
+  }
   //Lay ham phan trang tu folder helper
   const pagination = await Pagination(req, filter);
   //Lay san pham ra theo trang
   const Product = await 
   product.find(filter)
+  .collation({ locale: 'en', strength: 2 })// Sort ko phan biet hoa thuong
   .limit(pagination.limitItems)
   .skip(pagination.skip)
-  .sort({position : 'desc'});
+  .sort(sort);
   
   // Choc vao database lay data theo thang filter
   // const Product = await product.find(filter);

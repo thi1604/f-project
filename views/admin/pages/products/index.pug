@@ -3,6 +3,7 @@ include ../../mixins/filter.pug
 include ../../mixins/search.pug
 include ../../mixins/pagination.pug
 include ../../mixins/box-actions.pug
+include ../../mixins/sort.pug
 
 block main 
   h1(class="mb-4") Quản lý sản phẩm
@@ -16,8 +17,11 @@ block main
           +search(keyword)
   .card.mb-3
     .card-header Hành động
-    .card-body
+    .card-body()
       +box-actions(`/${prefix}/product/change-many-status`, listActions)
+  .card.mb-3
+    .card-header Sắp xếp
+      +sort()
   .card.mb-3
     .card-header Danh sách
     .card-body

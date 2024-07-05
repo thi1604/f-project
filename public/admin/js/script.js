@@ -302,6 +302,38 @@ if(divImage){
 
 // End preview anh trong form ben admin
 
+// Sap xep san pham theo cac tieu chi, va css lai option khi load lai trang
+const sort = document.querySelector("[sort]");
+if(sort){
+  let url = new URL(window.location.href);
+  const select = sort.querySelector("select");
+  select.addEventListener("change", ()=>{
+    const [sortKey, sortValue] = select.value.split("-");  
+    if(sortKey && sortValue){
+      url.searchParams.set("sortKey", sortKey);
+      url.searchParams.set("sortValue", sortValue);
+    }
+    window.location.href = url.href;
+  });
+}
+
+const defaultKey = url.searchParams.get('sortKey');
+const defaultValue = url.searchParams.get('sortValue');
+if(defaultValue && defaultKey){
+  const selected = document.querySelector(`option[value=${defaultKey}-${defaultValue}]`);
+  selected.selected = true;
+}
+
+const clear = document.querySelector("button[sort-clear]");
+if(clear){
+  clear.addEventListener("click", ()=>{
+    url.searchParams.delete('sortKey');
+    url.searchParams.delete('sortValue');
+    window.location.href = url.href;
+  });
+}
+//End sap xep san pham theo cac tieu chi, va css lai option khi load lai trang
+
 
 
 
