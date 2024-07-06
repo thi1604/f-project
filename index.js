@@ -31,6 +31,10 @@ app.use(cookieParser('ThiBeo'));
 app.use(session({ cookie: { maxAge: 60000 }}));
 app.use(flash());
 
+// TinyMCE
+const path = require('path');
+app.use('/tinymce', express.static(path.join(__dirname, 'node_modules', 'tinymce')));
+
 app.locals.prefix = prefixUrlAdmin;
 
 routeClient.index(app);
