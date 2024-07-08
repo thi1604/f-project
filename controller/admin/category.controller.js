@@ -1,5 +1,5 @@
 const ProductCategory = require("../../models/product-category.model");
-
+const selectTreeHelper = require("../../helper/select-tree.helper");
 module.exports.index = async (req, res) => {
   const record = await ProductCategory.find({
     deleted: false
@@ -14,9 +14,13 @@ module.exports.create = async (req, res) => {
   const record = await ProductCategory.find({
     deleted: false
   });
+
+  const categoryTree = selectTreeHelper(record);
+
   res.render("admin/pages/products-category/create.pug", {
     pageTitle: "Thêm mới danh mục sản phẩm",
-    listRecord: record
+    listRecord: record,
+    categoryTree: categoryTree
   });
 }
 

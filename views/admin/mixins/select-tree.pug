@@ -1,0 +1,7 @@
+mixin selectTree(items, index = "--")
+  for item in items
+    option(value=item.id) #{index}#{item.title}
+    if(item.childen)
+      +selectTree(item.childen, (index + "--"))
+      -// Ko duoc thay doi bien index(index += "--"), bien index dong vai tro nhu bien toan cuc
+      
