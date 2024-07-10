@@ -1,7 +1,10 @@
-mixin selectTree(items, index = "--")
+mixin selectTree(items, index = "--", id)
   for item in items
-    option(value=item.id) #{index}#{item.title}
+    if(id == item.id)
+      option(value=item.id selected = "true") #{index}#{item.title}
+    else
+      option(value=item.id) #{index}#{item.title}
     if(item.childen)
-      +selectTree(item.childen, (index + "--"))
+      +selectTree(item.childen, (index + "--"), id)
       -// Ko duoc thay doi bien index(index += "--"), bien index dong vai tro nhu bien toan cuc
       
