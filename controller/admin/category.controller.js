@@ -1,14 +1,30 @@
 const ProductCategory = require("../../models/product-category.model");
 const selectTreeHelper = require("../../helper/select-tree.helper");
 const prefix = require("../../config/system");
+const pagination = require("../../helper/pagination.helper");
 
 module.exports.index = async (req, res) => {
-  const record = await ProductCategory.find({
+
+  let record = await ProductCategory.find({
     deleted: false
   });
+
+  const Pagination = await pagination(req, record, "product-category");
+
+  if(req.query.page == '0'){
+    Pagination.currentPage = 1;
+  }
+
+  record = await 
+  ProductCategory
+  .find({deleted: false})
+  .limit(Pagination.limitItems)
+  .skip(Pagination.skip);
+
   res.render("admin/pages/products-category/index.pug", {
     pageTitle: "Danh mục sản phẩm",
-    listRecord: record
+    listRecord: record,
+    pagination: Pagination
   });
 }
 

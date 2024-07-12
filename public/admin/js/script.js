@@ -57,7 +57,10 @@ if(listPagination.length > 0){
   // phai xoa gia tri page tren link va reload page
   let url = new URL(window.location.href);
   let numPageOnUrl = parseInt(url.searchParams.get("page"));
-  if(numPageOnUrl > listPagination.length){
+  let maxPage = listPagination[listPagination.length - 1];
+  maxPage = parseInt(maxPage.getAttribute("num-page"));
+  
+  if(numPageOnUrl > maxPage){
     url.searchParams.delete("page");
     window.location.href = url.href;
   }

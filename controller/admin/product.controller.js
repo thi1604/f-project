@@ -54,7 +54,7 @@ module.exports.index = async (req, res) => {
     sort.position = 'desc'
   }
   //Lay ham phan trang tu folder helper
-  const pagination = await Pagination(req, filter);
+  const pagination = await Pagination(req, filter, "product");
   //Lay san pham ra theo trang
   const Product = await 
   product.find(filter)

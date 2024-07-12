@@ -1,15 +1,24 @@
 const roles = require("../../models/roles.model");
 const prefix = require("../../config/system");
-
+const pagination = require("../../helper/pagination.helper");
 
 module.exports.index = async (req, res)=>{
-  const records  = await roles.find({
+  let records  = await roles.find({
     deleted: false
   });
 
+  const Pagination = await pagination(req, records, "roles");
+
+  records = await roles.find(
+    {deleted: false}
+  )
+  .skip(Pagination.skip)
+  .limit(Pagination.limitItems);
+
   res.render(`${prefix}/pages/roles/index.pug`, {
     pageTitle: "Trang nhóm quyền",
-    records: records
+    records: records,
+    pagination: Pagination
   });
 };
 

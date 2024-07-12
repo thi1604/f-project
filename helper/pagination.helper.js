@@ -1,6 +1,6 @@
-const product = require("../models/product.model");
 
-module.exports =  async (req, filter) => {
+module.exports =  async (req, filter, nameModel) => {
+  const product = require(`../models/${nameModel}.model`);
   //Tao object cho trang thai pagination
   const pagination = {
     limitItems : 4,
