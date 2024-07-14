@@ -39,11 +39,52 @@ module.exports.createPost = async (req, res) => {
     _id: req.body.role_id,
     deleted : false
   }).select("title");
-  
+
   req.body.roleName = role.title;
 
   const newAccount = new account(req.body);
   await newAccount.save();
   req.flash("success", "Tạo thành công!");  
   res.redirect(`/${prefixUrl}/accounts`);
+}
+
+module.exports.edit = async (req, res) => {
+  try{
+    const id = req.params.id;
+    const Account = await account.findOne({
+      _id: id
+    });
+    if(Account){
+      const roles = await Roles.find({
+        deleted: false
+      });
+      res.render("admin/pages/accounts/edit.pug", {
+        pageTitle : "Chỉnh sửa tài khoản",
+        account: Account,
+        roles: roles
+      })
+    }
+    else{
+      req.flash("error", "Lỗi!");
+      res.redirect(`/${prefixUrl}/accounts`);
+    }
+  }catch(error){
+    req.flash("error", "Lỗi!");
+    res.redirect(`/${prefixUrl}/accounts`);
+  }
+}  
+
+module.exports.editPatch = async (req, res) => {
+  try{
+    const id = req.params.id;
+    await account.updateOne({
+      _id: id
+    }, req.body);
+    req.flash("success", "Cập nhật thành công!");
+    res.redirect('back');
+
+  }catch(error){
+    req.flash("error", "Lỗi!");
+    res.redirect(`/${prefixUrl}/accounts`);
+  }
 }
