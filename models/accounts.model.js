@@ -8,6 +8,7 @@ const accountSchema = new mongoose.Schema({
   token: String,
   avatar: String,
   role_id: String,
+  roleName: String,
   status: String,
   deleted: {
     type: Boolean,

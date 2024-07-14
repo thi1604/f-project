@@ -5,8 +5,15 @@ const Token = require("../../helper/generate.helper");
 const prefixUrl = require("../../config/system");
 const md5 = require('md5');
 
-module.exports.index = (req, res) => {
-  res.render("admin/pages/accounts/index.pug");
+module.exports.index = async (req, res) => {
+  const records = await account.find({
+    deleted: false
+  });
+
+  res.render("admin/pages/accounts/index.pug", {
+    pageTitle: "Danh sách tài khoản admin",
+    records: records
+  });
 }
 
 
@@ -27,6 +34,14 @@ module.exports.createPost = async (req, res) => {
   req.body.password = md5(req.body.password);
   const token = Token.generateRandomString(30);
   req.body.token = token;
+  // Tim ten nhom quyen cho account
+  const role = await Roles.findOne({
+    _id: req.body.role_id,
+    deleted : false
+  }).select("title");
+  
+  req.body.roleName = role.title;
+
   const newAccount = new account(req.body);
   await newAccount.save();
   req.flash("success", "Tạo thành công!");  
