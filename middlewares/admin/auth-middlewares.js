@@ -1,14 +1,14 @@
 const account = require("../../models/accounts.model");
 const prefix = require("../../config/system");
 
-module.exports = async (req, res) => {
-  const token = res.cookie.token;
-  if(!token){
+module.exports = async (req, res, next) => {
+  // const token = req.cookies.token;
+  if(req.cookies.token == ""){
     res.redirect(`/${prefix}/auth/login`);
     return;
   }
-  const record = account.findOne({
-    token: token,
+  const record = await account.findOne({
+    token: req.cookies.token,
     deleted: false
   });
 
@@ -16,5 +16,5 @@ module.exports = async (req, res) => {
     res.redirect(`/${prefix}/auth/login`);
     return;
   }
-  next();
+  next(); //Muon sai next() phai khai bao tren tham so
 }
