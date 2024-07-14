@@ -4,5 +4,9 @@ header.header
       .col-3
         .inner-logo
           a(href="/admin") ADMIN
+          a(
+            href=`/${prefix}/auth/logout`
+            class= "admin-logout"
+          ) Đăng xuất
 
       .col-9

@@ -28,6 +28,11 @@ module.exports.loginPost = async (req, res) => {
   }
 
   req.flash("success", "Đăng nhập thành công!");
+  res.cookie("token", record.token);
   res.redirect(`/${prefix}`);
+}
 
+module.exports.logOut = async (req, res) => {
+  res.clearCookie("token");
+  res.redirect(`/${prefix}/auth/login`);
 }
