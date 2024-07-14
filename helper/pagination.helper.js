@@ -1,5 +1,7 @@
 
 module.exports =  async (req, filter, nameModel) => {
+  if(nameModel == "trash")
+    nameModel = "product";
   const product = require(`../models/${nameModel}.model`);
   //Tao object cho trang thai pagination
   const pagination = {

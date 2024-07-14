@@ -44,7 +44,7 @@ module.exports.index = async (req, res)=>{
       status : "permanently-deleted"
     }
   ]
-  const Pagination = await pagination(req, filter);
+  const Pagination = await pagination(req, filter, "trash");
   const listProducts = await product.find(filter).limit(Pagination.limitItems).skip(Pagination.skip);
 
   res.render("admin/pages/trash/index.pug", {
