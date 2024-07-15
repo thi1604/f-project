@@ -381,7 +381,7 @@ if(tablePermissions){
     })
   });
 }
-// End Phan quyen cho nhom quyen
+// End Phan quyen cho nhom quyen(Quan trong)
 
 
 

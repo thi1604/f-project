@@ -1,20 +1,22 @@
 .sider
   .inner-menu
-    ul 
+    ul(
+      my-list-admin
+    ) 
       li
-        a(href="/admin") Tổng quan
+        a(href=`/${prefix}/dashboard`) Tổng quan
       li
-        a(href="/admin/product") Quản lí sản phẩm
+        a(href=`/${prefix}/product`) Quản lí sản phẩm
       li
-        a(href="/admin/products-category") Danh mục sản phẩm
+        a(href=`/${prefix}/products-category`) Danh mục sản phẩm
       li
-        a(href="/admin/roles") Nhóm quyền
+        a(href=`/${prefix}/roles`) Nhóm quyền
       li
-        a(href="/admin/roles/permissions") Phân quyền
+        a(href=`/${prefix}/roles/permissions`) Phân quyền
       li
         a(href=`/${prefix}/accounts`) Tài khoản admin
       li
         a(
           class = "trash"
-          href="/admin/trash"
+          href=`/${prefix}/trash`
         ) Thùng rác
