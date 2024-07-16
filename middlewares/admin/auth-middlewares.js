@@ -1,20 +1,30 @@
-const account = require("../../models/accounts.model");
+const Account = require("../../models/accounts.model");
 const prefix = require("../../config/system");
+const Roles = require("../../models/roles.model");
+
 
 module.exports = async (req, res, next) => {
-  // const token = req.cookies.token;
+  const token = req.cookies.token;
   if(req.cookies.token == ""){
     res.redirect(`/${prefix}/auth/login`);
     return;
   }
-  const record = await account.findOne({
+  const account = await Account.findOne({
     token: req.cookies.token,
     deleted: false
-  });
+  }).select("fullName email phone avatar status role_id");
 
-  if(!record){
+  if(!account){
     res.redirect(`/${prefix}/auth/login`);
     return;
   }
+
+  const role = await Roles.findOne({
+    _id: account.role_id
+  }).select("permissions");
+
+
+  res.locals.account = account; // su dung account cho cac middleware tiep theo(chua trong res.local)
+  res.locals.role = role;
   next(); //Muon sai next() phai khai bao tren tham so
 }

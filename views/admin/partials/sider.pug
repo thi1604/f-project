@@ -5,18 +5,24 @@
     ) 
       li
         a(href=`/${prefix}/dashboard`) Tổng quan
-      li
-        a(href=`/${prefix}/product`) Quản lí sản phẩm
-      li
-        a(href=`/${prefix}/products-category`) Danh mục sản phẩm
-      li
-        a(href=`/${prefix}/roles`) Nhóm quyền
-      li
-        a(href=`/${prefix}/roles/permissions`) Phân quyền
-      li
-        a(href=`/${prefix}/accounts`) Tài khoản admin
-      li
-        a(
-          class = "trash"
-          href=`/${prefix}/trash`
-        ) Thùng rác
+      if(role.permissions.includes("products_view"))
+        li
+          a(href=`/${prefix}/product`) Quản lí sản phẩm
+      if(role.permissions.includes("products-category_view"))
+        li
+          a(href=`/${prefix}/products-category`) Danh mục sản phẩm
+      if(role.permissions.includes("roles_view"))
+        li
+          a(href=`/${prefix}/roles`) Nhóm quyền
+      if(role.permissions.includes("roles_permissions"))  
+        li
+          a(href=`/${prefix}/roles/permissions`) Phân quyền
+      if(role.permissions.includes("accounts_view"))  
+        li
+          a(href=`/${prefix}/accounts`) Tài khoản admin
+      if(role.permissions.includes("trash_view"))
+        li
+            a(
+              class = "trash"
+              href=`/${prefix}/trash`
+            ) Thùng rác
