@@ -29,10 +29,16 @@ module.exports.create = (req, res)=>{
 };
 
 module.exports.createPost = async (req, res)=>{
-  req.flash("success", "Tạo mới thành công!");
-  const newRecord = new roles(req.body);
-  await newRecord.save();
-  res.redirect(`/${prefix}/roles`);
+  if(res.locals.role.permissions.includes("roles_create")){
+    req.flash("success", "Tạo mới thành công!");
+    const newRecord = new roles(req.body);
+    await newRecord.save();
+    res.redirect(`/${prefix}/roles`);
+  }
+  else{
+    res.send("403");
+  }
+
 };
 
 module.exports.edit = async (req, res)=>{
@@ -59,12 +65,19 @@ module.exports.edit = async (req, res)=>{
 };
 
 module.exports.editPatch = async (req, res)=>{
-  const id = req.params.id;
-  await roles.updateOne({
-    _id: id
-  }, req.body);
-  req.flash("success", "Đã cập nhật!");
-  res.redirect('back');
+  if(res.locals.role.permissions.includes("roles_edit")){
+    const id = req.params.id;
+    await roles.updateOne({
+      _id: id
+    }, req.body);
+    req.flash("success", "Đã cập nhật!");
+    res.redirect('back');
+  }
+
+  else{
+    res.send("403");
+  }
+
 };
 
 module.exports.permissions = async (req, res) =>{
@@ -79,17 +92,23 @@ module.exports.permissions = async (req, res) =>{
 };
 
 module.exports.permissionsPatch = async (req, res) =>{
-  const roleAndPermissions = req.body.rolesArray;
+  if(res.locals.role.permissions.includes("roles_permissions")){
+    const roleAndPermissions = req.body.rolesArray;
 
-  roleAndPermissions.forEach(async (item)=> {
-    await roles.updateOne({
-      _id: item.id,
-    }, {
-      permissions: item.permissions
+    roleAndPermissions.forEach(async (item)=> {
+      await roles.updateOne({
+        _id: item.id,
+      }, {
+        permissions: item.permissions
+      });
     });
-  });
 
-  res.json({
-    code: 200
-  });
+    res.json({
+      code: 200
+    });
+
+  }
+  else{
+    res.send("403");
+  }
 };

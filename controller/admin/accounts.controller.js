@@ -31,21 +31,27 @@ module.exports.create = async (req, res) => {
 
 
 module.exports.createPost = async (req, res) => {
-  req.body.password = md5(req.body.password);
-  const token = Token.generateRandomString(30);
-  req.body.token = token;
-  // Tim ten nhom quyen cho account
-  const role = await Roles.findOne({
-    _id: req.body.role_id,
-    deleted : false
-  }).select("title");
+  if(res.locals.role.permissions.includes("accounts_create")){
 
-  req.body.roleName = role.title;
+    req.body.password = md5(req.body.password);
+    const token = Token.generateRandomString(30);
+    req.body.token = token;
+    // Tim ten nhom quyen cho account
+    const role = await Roles.findOne({
+      _id: req.body.role_id,
+      deleted : false
+    }).select("title");
 
-  const newAccount = new account(req.body);
-  await newAccount.save();
-  req.flash("success", "Tạo thành công!");  
-  res.redirect(`/${prefixUrl}/accounts`);
+    req.body.roleName = role.title;
+
+    const newAccount = new account(req.body);
+    await newAccount.save();
+    req.flash("success", "Tạo thành công!");  
+    res.redirect(`/${prefixUrl}/accounts`);
+  }
+  else{
+    res.send("403");
+  }
 }
 
 module.exports.edit = async (req, res) => {
@@ -75,16 +81,21 @@ module.exports.edit = async (req, res) => {
 }  
 
 module.exports.editPatch = async (req, res) => {
-  try{
-    const id = req.params.id;
-    await account.updateOne({
-      _id: id
-    }, req.body);
-    req.flash("success", "Cập nhật thành công!");
-    res.redirect('back');
+  if(res.locals.role.permissions.includes("accounts_edit")){
+    try{
+      const id = req.params.id;
+      await account.updateOne({
+        _id: id
+      }, req.body);
+      req.flash("success", "Cập nhật thành công!");
+      res.redirect('back');
 
-  }catch(error){
-    req.flash("error", "Lỗi!");
-    res.redirect(`/${prefixUrl}/accounts`);
+    }catch(error){
+      req.flash("error", "Lỗi!");
+      res.redirect(`/${prefixUrl}/accounts`);
+    }
+  }
+  else{
+    res.send("403");
   }
 }

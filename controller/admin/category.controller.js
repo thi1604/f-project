@@ -43,16 +43,21 @@ module.exports.create = async (req, res) => {
 }
 
 module.exports.createPost = async (req, res) => {
-  if(req.body.position){
-    req.body.position = parseInt(req.body.position);
+  if(res.locals.role.permissions.includes("products-category_create")){
+    if(req.body.position){
+      req.body.position = parseInt(req.body.position);
+    }
+    else{
+      req.body.position = (await ProductCategory.countDocuments({})) + 1;
+    }
+    const newCategory = new ProductCategory(req.body);
+    req.flash("success", "Thêm danh mục thành công !");
+    await newCategory.save(); // Phai co tu await(Doi luu vao database, ko co se chua kip luu)
+    res.redirect("/admin/products-category");
   }
   else{
-    req.body.position = (await ProductCategory.countDocuments({})) + 1;
+    res.send("403");
   }
-  const newCategory = new ProductCategory(req.body);
-  req.flash("success", "Thêm danh mục thành công !");
-  await newCategory.save(); // Phai co tu await(Doi luu vao database, ko co se chua kip luu)
-  res.redirect("/admin/products-category");
 }
 
 module.exports.edit = async (req, res) => {
@@ -84,11 +89,16 @@ module.exports.edit = async (req, res) => {
 }
 
 module.exports.editPatch = async (req, res)=> {
-  const id = req.params.id;
-  await ProductCategory.updateOne(
-  {
-    _id : id
-  }, req.body);
-  
-  res.redirect('back');
+  if(res.locals.role.permissions.includes("products-category_edit")){
+    const id = req.params.id;
+    await ProductCategory.updateOne(
+    {
+      _id : id
+    }, req.body);
+    
+    res.redirect('back');
+  }
+  else{
+    res.send("403");
+  }
 }
