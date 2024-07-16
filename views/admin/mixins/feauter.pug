@@ -11,6 +11,7 @@ mixin feauter(title, records, nameData)
           data-id=item.id 
           data-name=`${nameData}_view`
           checked=(item.permissions.includes(`${nameData}_view`) ? true : false)
+          disabled=(item.title == "Quản trị viên" ? true : false)
         )
   tr
     if(title != "Thùng rác")
@@ -22,6 +23,7 @@ mixin feauter(title, records, nameData)
             data-id=item.id
             data-name=`${nameData}_create`
             checked=(item.permissions.includes(`${nameData}_create`) ? true : false)
+            disabled=(item.title == "Quản trị viên" ? true : false)
           )
   tr
     td Chỉnh sửa
@@ -32,6 +34,7 @@ mixin feauter(title, records, nameData)
           data-id=item.id
           data-name=`${nameData}_edit`
           checked=(item.permissions.includes(`${nameData}_edit`) ? true : false)
+          disabled=(item.title == "Quản trị viên" ? true : false)
         )
   tr
     td Xóa
@@ -42,4 +45,5 @@ mixin feauter(title, records, nameData)
           data-id=item.id
           data-name=`${nameData}_delete`
           checked=(item.permissions.includes(`${nameData}_delete`) ? true : false)
+          disabled=(item.title == "Quản trị viên" ? true : false)
         )

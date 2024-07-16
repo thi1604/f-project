@@ -37,6 +37,7 @@ block main
               data-id=item.id 
               data-name=`roles_permissions`
               checked=(item.permissions.includes(`roles_permissions`) ? true : false)
+              disabled=(item.title == "Quản trị viên" ? true : false)
             )
       +feauter("Tài khoản admin", records, "accounts")
       +feauter("Thùng rác", records, "trash")
