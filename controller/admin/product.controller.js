@@ -220,7 +220,7 @@ module.exports.createPost = async (req, res) => {
 
     const IdCreated = res.locals.account.id;
 
-    req.body.IdPersonCreatedAt = IdCreated;
+    req.body.idPersonCreated = IdCreated;
 
     const newItem = new product(req.body);
     await newItem.save();
@@ -257,6 +257,10 @@ module.exports.editPatch = async (req, res) => {
     req.body.price = parseInt(req.body.price);
     req.body.discountPercentage = parseInt(req.body.discountPercentage);
     req.body.stock = parseInt(req.body.stock);
+
+    const idUpdated = res.locals.account.id;
+    req.body.idPersonUpdated = idUpdated;
+
     let position = req.body.position;
     if(!position){
       position = await product.countDocuments({});
@@ -289,11 +293,19 @@ module.exports.detail = async (req, res)=>{
   });
 
   item.formatCreatedAt = moment(item.createdAt).format("HH:mm:ss DD/MM/YY");
+  item.formatUpdatedAt = moment(item.updatedAt).format("HH:mm:ss DD/MM/YY");
+
   const account = await Account.findOne({
-    _id: item.IdPersonCreatedAt
+    _id: item.idPersonCreated
   }).select("fullName");
 
+  const accountUpdated = await Account.findOne({
+    _id: item.idPersonUpdated
+  }).select("fullName");
+
+
   item.namePersonCreated = account.fullName;
+  item.namePersonUpdated = accountUpdated.fullName;
   
   res.render(`${prefix}/pages/products/detail.pug`,{
     pageTitle: "Chi tiết sản phẩm",
