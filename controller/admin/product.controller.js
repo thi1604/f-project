@@ -150,17 +150,18 @@ module.exports.deleteItem = async (req, res) => {
           _id : id
         }, 
         {
-          deleted : true
+          deleted : true,
+          idPersonDeleted: res.locals.account.id
         }
       );
 
       req.flash('success', 'Xoá thành công!');
-      res.redirect(`${prefĩx}/product`);
-
-    }catch(error){
       res.json({
         code : 200
       });
+
+    }catch(error){
+      res.redirect(`${prefix}/product`);
     }
   }
   else{

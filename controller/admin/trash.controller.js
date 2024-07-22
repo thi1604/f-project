@@ -1,5 +1,7 @@
 const product = require("../../models/product.model");
 const pagination = require("../../helper/pagination.helper");
+const account = require("../../models/accounts.model");
+const moment = require("moment");
 
 
 module.exports.index = async (req, res)=>{
@@ -44,8 +46,19 @@ module.exports.index = async (req, res)=>{
       status : "permanently-deleted"
     }
   ]
+
   const Pagination = await pagination(req, filter, "trash");
   const listProducts = await product.find(filter).limit(Pagination.limitItems).skip(Pagination.skip);
+  for(item of listProducts){
+    const namePersonDeleted = await account.findOne({
+      _id: item.idPersonDeleted
+    }).select("fullName");
+    if(namePersonDeleted){
+      item.namePersonDeleted = namePersonDeleted.fullName;
+    }
+    item.formatUpdatedAt = moment(item.updatedAt).format("HH:mm:ss DD/MM/YY");
+  }
+  console.log(listProducts);
 
   res.render("admin/pages/trash/index.pug", {
     pageTitle : "Trang thùng rác",

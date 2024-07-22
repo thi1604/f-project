@@ -14,6 +14,7 @@ const productSchema = new mongoose.Schema({
   position: Number,
   idPersonCreated: String,
   idPersonUpdated: String,
+  idPersonDeleted: String,
   deleted: {
     type: Boolean,
     default: false

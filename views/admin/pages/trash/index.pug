@@ -38,6 +38,7 @@ block main
               th Vị trí
               th Trạng thái
               th Hành động
+              th Xóa bởi 
 
           tbody
             for item, index in listProducts
@@ -88,6 +89,8 @@ block main
                     link-id-button-trash = `/${prefix}/trash/permanently-deleted/${item.id}`
       
                   ) Xóa vĩnh viễn
+                td
+                  div #{item.namePersonDeleted} #{item.formatUpdatedAt}
       div(class="mx-auto")
         +pagination(pagination)
     
