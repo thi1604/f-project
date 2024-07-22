@@ -1,8 +1,8 @@
 const product = require("../../models/product.model");
 const Pagination = require("../../helper/pagination.helper");
-const system = require("../../config/system");
 const prefix = require("../../config/system");
-
+const moment = require("moment");
+const Account = require("../../models/accounts.model");
 
 module.exports.index = async (req, res) => {
   const filter = {
@@ -144,17 +144,18 @@ module.exports.changeManyStatus = async (req, res) => {
 module.exports.deleteItem = async (req, res) => {
   if(res.locals.role.permissions.includes("products_delete")){
     try{
-    const id = req.params.id;   //res.params tra ve 1 ob chua cac bien dong tren url
-    await product.updateOne(
-      {
-        _id : id
-      }, 
-      {
-        deleted : true
-      }
-    );
+      const id = req.params.id;   //res.params tra ve 1 ob chua cac bien dong tren url
+      await product.updateOne(
+        {
+          _id : id
+        }, 
+        {
+          deleted : true
+        }
+      );
 
-    req.flash('success', 'Xoá thành công!');
+      req.flash('success', 'Xoá thành công!');
+      res.redirect(`${prefĩx}/product`);
 
     }catch(error){
       res.json({
@@ -216,6 +217,11 @@ module.exports.createPost = async (req, res) => {
     else
       position = await product.countDocuments();
     req.body.position = position + 1;
+
+    const IdCreated = res.locals.account.id;
+
+    req.body.IdPersonCreatedAt = IdCreated;
+
     const newItem = new product(req.body);
     await newItem.save();
     res.redirect('/admin/product');
@@ -278,12 +284,19 @@ module.exports.editPatch = async (req, res) => {
 
 module.exports.detail = async (req, res)=>{
   const id = req.params.id;
-  const item = await product.find({
+  const item = await product.findOne({
     _id : id
   });
 
+  item.formatCreatedAt = moment(item.createdAt).format("HH:mm:ss DD/MM/YY");
+  const account = await Account.findOne({
+    _id: item.IdPersonCreatedAt
+  }).select("fullName");
+
+  item.namePersonCreated = account.fullName;
+  
   res.render(`${prefix}/pages/products/detail.pug`,{
     pageTitle: "Chi tiết sản phẩm",
-    product : item[0]
+    product : item
   });
 }

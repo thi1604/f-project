@@ -4,7 +4,6 @@ const Roles = require("../../models/roles.model");
 
 
 module.exports = async (req, res, next) => {
-  const token = req.cookies.token;
   if(req.cookies.token == ""){
     res.redirect(`/${prefix}/auth/login`);
     return;

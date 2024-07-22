@@ -32,6 +32,10 @@ block main
   if (product.position)
     div(class="mb-4") Vị trí: <b>#{product.position}</b>
 
+  if(product.createdAt)
+    div(class="mb-4") Tạo bởi: <b>#{product.namePersonCreated}</b>
+    div(class="mb-4") Thời gian tạo: <b> #{product.formatCreatedAt}</b>
+
   if (product.description)
     h2(class="mb-4") Mô tả sản phẩm
     div(class="mb-4") #{product.description}
