@@ -8,6 +8,9 @@ const roleSchema = new mongoose.Schema(
     type: Array,
     default: []
   },
+  idPersonCreated: String,
+  idPersonUpdated: String,
+  idPersonDeleted: String,
   deleted: {
     type: Boolean,
     default: false

@@ -296,17 +296,25 @@ module.exports.detail = async (req, res)=>{
   item.formatCreatedAt = moment(item.createdAt).format("HH:mm:ss DD/MM/YY");
   item.formatUpdatedAt = moment(item.updatedAt).format("HH:mm:ss DD/MM/YY");
 
+
+  //Lay ra nguoi tao
   const account = await Account.findOne({
     _id: item.idPersonCreated
   }).select("fullName");
+  //Het lay ra nguoi tao
 
+  //Lay ra nguoi updated
   const accountUpdated = await Account.findOne({
     _id: item.idPersonUpdated
   }).select("fullName");
+  //End lay ra nguoi updated
 
-
-  item.namePersonCreated = account.fullName;
-  item.namePersonUpdated = accountUpdated.fullName;
+  if(accountUpdated){
+    item.namePersonUpdated = accountUpdated.fullName;
+  }
+  if(account){
+    item.namePersonCreated = account.fullName;
+  }
   
   res.render(`${prefix}/pages/products/detail.pug`,{
     pageTitle: "Chi tiết sản phẩm",

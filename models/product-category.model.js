@@ -12,6 +12,9 @@ const categorySchema = new mongoose.Schema({
   thumbnail: String,
   status: String,
   position: Number,
+  idPersonCreated: String,
+  idPersonUpdated: String,
+  idPersonDeleted: String,
   deleted: {
     type: Boolean,
     default: false

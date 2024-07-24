@@ -4,6 +4,8 @@ const account = require("../../models/accounts.model");
 const Token = require("../../helper/generate.helper");
 const prefixUrl = require("../../config/system");
 const md5 = require('md5');
+const moment = require("moment");
+
 
 module.exports.index = async (req, res) => {
   const records = await account.find({
@@ -43,6 +45,8 @@ module.exports.createPost = async (req, res) => {
     }).select("title");
 
     req.body.roleName = role.title;
+
+    req.body.idPersonCreated = res.locals.account.id;
 
     const newAccount = new account(req.body);
     await newAccount.save();
@@ -84,6 +88,7 @@ module.exports.editPatch = async (req, res) => {
   if(res.locals.role.permissions.includes("accounts_edit")){
     try{
       const id = req.params.id;
+      req.body.idPersonUpdated = res.locals.account.id;
       await account.updateOne({
         _id: id
       }, req.body);
@@ -98,4 +103,38 @@ module.exports.editPatch = async (req, res) => {
   else{
     res.send("403");
   }
+}
+
+module.exports.detail = async (req, res)=>{
+  const id = req.params.id;
+  const item = await account.findOne({
+    _id : id
+  });
+
+  item.formatCreatedAt = moment(item.createdAt).format("HH:mm:ss DD/MM/YY");
+  item.formatUpdatedAt = moment(item.updatedAt).format("HH:mm:ss DD/MM/YY");
+
+
+  //Lay ra nguoi tao
+  const accountCreated = await account.findOne({
+    _id: item.idPersonCreated
+  }).select("fullName");
+  //Het lay ra nguoi tao
+
+  //Lay ra nguoi updated
+  const accountUpdated = await account.findOne({
+    _id: item.idPersonUpdated
+  }).select("fullName");
+  //End lay ra nguoi updated
+
+  if(accountUpdated){
+    item.namePersonUpdated = accountUpdated.fullName;
+  }
+  if(accountCreated){
+    item.namePersonCreated = accountCreated.fullName;
+  }
+  res.render(`${prefixUrl}/pages/accounts/detail.pug`,{
+    pageTitle: "Chi tiết tài khoản",
+    product : item
+  });
 }

@@ -56,9 +56,8 @@ module.exports.index = async (req, res)=>{
     if(namePersonDeleted){
       item.namePersonDeleted = namePersonDeleted.fullName;
     }
-    item.formatUpdatedAt = moment(item.updatedAt).format("HH:mm:ss DD/MM/YY");
+    item.formatUpdatedAt = moment(item.updatedAt).format("DD/MM/YY HH:mm:ss");
   }
-  console.log(listProducts);
 
   res.render("admin/pages/trash/index.pug", {
     pageTitle : "Trang thùng rác",
@@ -70,7 +69,6 @@ module.exports.index = async (req, res)=>{
   });
 
 }
-
 
 module.exports.restore = async(req, res) => {
   if(res.locals.role.permissions.includes("roles_permissions")){
