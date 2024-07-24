@@ -20,7 +20,7 @@ module.exports = async (req, res, next) => {
 
   const role = await Roles.findOne({
     _id: account.role_id
-  }).select("permissions");
+  }).select("permissions title");
 
 
   res.locals.account = account; // su dung account cho cac middleware tiep theo(chua trong res.local)

@@ -4,9 +4,12 @@ header.header
       .col-3
         .inner-logo
           a(href="/admin") ADMIN
-          a(
-            href=`/${prefix}/auth/logout`
-            class= "admin-logout"
-          ) Đăng xuất
-
-      .col-9
+      div(class="col-9 text-right")
+        a(
+          href=`/${prefix}/profile`
+          class="btn btn-info btn-sm"
+        ) #{account.fullName}
+        a(
+          href=`/${prefix}/auth/logout`
+          class="btn btn-danger btn-sm ml-2"
+        ) Đăng xuất
