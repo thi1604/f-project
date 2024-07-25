@@ -28,7 +28,7 @@ module.exports.index = async (req, res)=>{
     })
     .sort({ position :"desc"})
     .limit(6)
-    .select("-description");
+    .select("-description"); //Lay tat ca cac truong tru truong description
 
     for (const item of newProducts) {
         item.priceNew = ((1 - item.discountPercentage/100)* item.price).toFixed(0);

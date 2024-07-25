@@ -3,6 +3,8 @@ const Pagination = require("../../helper/pagination.helper");
 const prefix = require("../../config/system");
 const moment = require("moment");
 const Account = require("../../models/accounts.model");
+const categoryModel = require("../../models/product-category.model");
+const helperTree = require("../../helper/select-tree.helper");
 
 module.exports.index = async (req, res) => {
   const filter = {
@@ -197,8 +199,18 @@ module.exports.changePosition = async (req, res) => {
 };
 
 module.exports.create = async (req, res) => {
+
+  const listCategory = await categoryModel.find({
+    deleted: false,
+    status: "active"
+  });
+
+  const treeCategory = helperTree(listCategory);
+
+  
   res.render("admin/pages/products/create.pug",{ //Khi render file pug phai ghi .pug vao duoi file
-    pageTitle: "Thêm mới sản phẩm"
+    pageTitle: "Thêm mới sản phẩm",
+    treeCategory: treeCategory
   });
 };
 
@@ -240,9 +252,18 @@ module.exports.edit = async (req, res) => {
       _id : id
     });
     
+    const listCategory = await categoryModel.find({
+      deleted: false,
+      status: "active"
+    });
+  
+    const treeCategory = helperTree(listCategory);
+  
+
     res.render("admin/pages/products/edit.pug", {
       pageTitle: "Trang chỉnh sửa sp",
-      product: item
+      product: item,
+      treeCategory: treeCategory
     });
   }catch{
     res.redirect(`/${prefix}/product`);

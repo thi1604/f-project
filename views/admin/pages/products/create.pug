@@ -1,4 +1,5 @@
 extends ../../layouts/default.pug
+include ../../mixins/select-tree.pug
 
 block main
   if(role.permissions.includes("products_create"))
@@ -38,6 +39,15 @@ block main
           checked
         )
         label(for="feauted0" class="form-check-label") Không nổi bật
+      div(class="form-group")
+        label(for="parent_id") Danh mục cha
+        select(
+          class="form-control"
+          id="parent_id"
+          name="parent_id"
+        )
+          option(value="") -- Chọn danh mục cha --
+          +selectTree(treeCategory)
       div(class="form-group")
         label(for="desc") Mô tả
         textarea(
