@@ -11,6 +11,7 @@ const productSchema = new mongoose.Schema({
   stock: Number,
   thumbnail: String,
   status: String,
+  feauted: String, // San pham noi bat
   position: Number,
   idPersonCreated: String,
   idPersonUpdated: String,

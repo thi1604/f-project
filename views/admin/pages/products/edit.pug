@@ -19,6 +19,26 @@ block main
           required
           value=product.title
         )
+      div(class="form-group form-check form-check-inline")
+        input(
+          type="radio"
+          class="form-check-input"
+          id="feauted1"
+          name="feauted"
+          value="1"
+          checked=(product.feauted == "1" ? true : false)
+        )
+        label(for="feauted1" class="form-check-label") Nổi bật
+      div(class="form-group form-check form-check-inline")
+        input(
+          type="radio"
+          class="form-check-input"
+          id="feauted0"
+          name="feauted"
+          value="0"
+          checked=(product.feauted == "0" ? true : false)
+        )
+        label(for="feauted0" class="form-check-label") Không nổi bật
       div(class="form-group")
         label(for="desc") Mô tả
         textarea(
