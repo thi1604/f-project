@@ -6,7 +6,10 @@ mixin list-products-standard(title, products)
             for item in products
                 .row
                 .col-4.mb-3.mr-3 
-                    a(href=`/products/detail/${item.slug}`)
+                    a(
+                        href=`/products/detail/${item.slug}`
+                        style="text-decoration: none"
+                    )
                         .product-item
                             .inner-image
                                 img(src=item.thumbnail, alt=item.title)
