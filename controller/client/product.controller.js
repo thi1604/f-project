@@ -1,14 +1,26 @@
 const Product = require("../../models/product.model.js");
 const categoryModel = require("../../models/product-category.model");
+const Pagination = require("../../helper/pagination.helper");
+
 
 module.exports.index = async (req, res) => {
-    const listProduct = await Product.find({
+    const filter = {
         status: "active",
         deleted: false
-    }).sort({position : "desc"});
+    }
+
+    //Pagination co async nen luu y phai dung await truoc
+    const pagination = await Pagination(req, filter, "product", 6);
+
+    const listProduct = await Product
+    .find(filter).skip(pagination.skip).limit(pagination.limitItems).select("-description")
+    .sort({position : "desc"});
+
+    
     res.render("client/pages/product/index.pug", {
-        pageTitle: "Trang sp",
-        products: listProduct
+        pageTitle: "Tất cả sản phẩm",
+        products: listProduct,
+        pagination: pagination
     });
 };
 
@@ -40,6 +52,19 @@ module.exports.category = async (req, res) => {
 
     //$in : Lay theo cac tieu chi co trong mang $in(chi can co trong mang $in)
 
+    const filter = {
+        parent_id:{
+            $in: [
+                idCategoryCurrent.id,
+                ...allSubCategoryId
+            ]
+        },
+        status: "active",
+        deleted: false
+    }
+
+    const pagination = await Pagination(req, filter, "product", 6);
+
     const listProducts = await Product.find({
         parent_id:{
             $in: [
@@ -49,11 +74,12 @@ module.exports.category = async (req, res) => {
         },
         deleted: false,
         status: "active"
-    });
+    }).skip(pagination.skip).limit(pagination.limitItems).select("-description");
         
     res.render("client/pages/product/index.pug", {
         pageTitle: idCategoryCurrent.title,
-        products: listProducts
+        products: listProducts,
+        pagination: pagination
     });
 }
 

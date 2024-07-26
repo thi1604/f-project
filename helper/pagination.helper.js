@@ -1,11 +1,11 @@
 
-module.exports =  async (req, filter, nameModel) => {
+module.exports =  async (req, filter, nameModel, limitItems = 4) => {
   if(nameModel == "trash")
     nameModel = "product";
   const product = require(`../models/${nameModel}.model`);
   //Tao object cho trang thai pagination
   const pagination = {
-    limitItems : 4,
+    limitItems : limitItems,
     currentPage : 1 //Mac dinh la trang 1
   };
 

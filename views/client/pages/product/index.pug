@@ -1,7 +1,9 @@
 extends ../../layouts/default.pug
 include ../../mixins/box-head.pug
 include ../../mixins/standard-products.pug
+include ../../mixins/pagination.pug
 
 block main
-    +list-products-standard(pageTitle, products)
-                
+    +list-products-standard(pageTitle, products)     
+    .container
+        +pagination(pagination)
