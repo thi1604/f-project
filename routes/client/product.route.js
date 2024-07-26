@@ -8,4 +8,6 @@ router.get("/:slug", controller.category);
 
 router.get("/creat", controller.creat);
 
+router.get("/detail/:slug", controller.detail);
+
 module.exports = router;

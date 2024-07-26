@@ -62,3 +62,19 @@ module.exports.creat = (req, res) => {
         pageTitle: "Trang tao moi sp"
     });
 };
+
+module.exports.detail = async (req, res) => {
+
+    const product = await Product.findOne({
+        slug: req.params.slug
+    });
+
+    const newPrice = ((1 - product.discountPercentage/100) * product.price).toFixed(0);
+
+    product.priceNew = newPrice;
+
+    res.render("client/pages/product/detail.pug", {
+        pageTitle: "Trang chi tiết sp",
+        product: product
+    });
+};
