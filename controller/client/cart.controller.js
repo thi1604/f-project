@@ -9,9 +9,15 @@ module.exports.addPost = async (req, res) => {
 
     const cartId = req.cookies.cartId;
 
-    await product.findOne({
+    const productCurrent = await product.findOne({
       _id: productId
     }); //Bat loi try catch khi user gui sai id product
+    
+    if(!productCurrent){
+      req.flash("error", "Lỗi!");
+      res.redirect('/products');
+      return;
+    }
 
     const cartCurrent = await cartModel.findOne({
       _id: cartId
@@ -53,6 +59,32 @@ module.exports.addPost = async (req, res) => {
       res.redirect('/products');
   }
   catch(error){
+    req.flash("error", "Lỗi!");
     res.redirect('/products');
   }
 };
+
+module.exports.detail = async (req, res) => {
+  const cartId = req.cookies.cartId;
+  const cartCurrent = await cartModel.findOne({
+    _id: cartId
+  });
+
+  cartCurrent.totalPrice = 0;
+
+  for (const item of cartCurrent.products) {
+    const productCurrent = await product.findOne({
+      _id: item.idProduct
+    }).select("thumbnail price title discountPercentage stock"); 
+
+    productCurrent.priceNew = ((1 - (productCurrent.discountPercentage)/100) * productCurrent.price).toFixed(0);
+    productCurrent.totalPriceProduct = productCurrent.priceNew * productCurrent.stock;
+    item.infoProduct = productCurrent;
+    cartCurrent.totalPrice += productCurrent.totalPriceProduct;
+  }
+
+    res.render("client/pages/cart/index.pug", {
+    pageTitle: "Giỏ hàng",
+    cartDetail: cartCurrent
+  });
+}
