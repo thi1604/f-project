@@ -1,6 +1,4 @@
 
-
-
 const listPagination = document.querySelectorAll("[num-page]"); 
 // console.log(listPagination);
 
@@ -33,3 +31,16 @@ if(listPagination.length > 0){
   const currButton = document.querySelector(`[num-page="${currPage}"]`);
   currButton.classList.add("active");
 }
+
+
+// An thong bao khi thay doi trang thai san pham
+const hidden = document.querySelector("[show-alert]");
+if(hidden){
+  console.log(hidden);
+  let time = hidden.getAttribute("show-alert") || 3000;
+  time = parseInt(time);
+  setTimeout(()=>{
+    hidden.classList.add("hidden");
+  }, time);
+}
+// End an thong bao khi thay doi trang thai san pham

@@ -12,6 +12,12 @@ module.exports.index = async (req, res) => {
     //Pagination co async nen luu y phai dung await truoc
     const pagination = await Pagination(req, filter, "product", 6);
 
+    if(req.query.page){
+        res.cookie("pageCurrent", req.query.page);
+    }
+    else
+        res.clearCookie("pageCurrent");
+
     const listProduct = await Product
     .find(filter).skip(pagination.skip).limit(pagination.limitItems).select("-description")
     .sort({position : "desc"});
