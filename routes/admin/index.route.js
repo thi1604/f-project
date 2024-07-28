@@ -11,7 +11,7 @@ const prefixUrl = require("../../config/system.js");
 const authMiddleware = require("../../middlewares/admin/auth-middlewares");
 // Khai bao router cho cac trang lon
 module.exports.index = (app) => {
-    const name = prefixUrl;  //Thu ham cho nay !!
+    const name = prefixUrl;  //Thu ham cho nay !!   
     app.use(`/${name}/dashboard`, 
         authMiddleware,
         homeRouter

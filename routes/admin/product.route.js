@@ -3,6 +3,7 @@ const router = express.Router();
 const Alert = require("../../validates/admin/products.validates");
 const controller = require("../../controller/admin/product.controller");
 const uploadtoCloud = require("../../middlewares/admin/uploadCloud.middlewares");
+
 router.get("", controller.index);
 
 router.patch("/change-status/:id/:status", controller.changeStatus);

@@ -88,3 +88,24 @@ module.exports.detail = async (req, res) => {
     cartDetail: cartCurrent
   });
 }
+
+module.exports.delete = async (req, res) => {
+  const idProduct = req.params.id;
+  try{
+    await cartModel.updateOne({
+      _id: req.cookies.cartId,
+    }, {
+      $pull: {
+        "products": {
+          idProduct: idProduct
+        } 
+      }
+    });
+    req.flash("success", "Xóa thành công!");
+    res.redirect("back");
+  }
+  catch(error){
+    req.flash("error", "Lỗi!");
+    res.redirect("/cart");
+  }
+}
