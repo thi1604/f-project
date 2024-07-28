@@ -73,17 +73,22 @@ module.exports.detail = async (req, res) => {
   cartCurrent.totalPrice = 0;
 
   for (const item of cartCurrent.products) {
+    // console.log("ok");
     const productCurrent = await product.findOne({
       _id: item.idProduct
-    }).select("thumbnail price title discountPercentage stock"); 
+    }).select("thumbnail price title discountPercentage stock slug"); 
+    
+    // console.log(productCurrent);
 
-    productCurrent.priceNew = ((1 - (productCurrent.discountPercentage)/100) * productCurrent.price).toFixed(0);
-    productCurrent.totalPriceProduct = productCurrent.priceNew * productCurrent.stock;
+    productCurrent.priceNew = parseInt(((1 - productCurrent.discountPercentage/100) * productCurrent.price).toFixed(0));
+    productCurrent.totalPriceProduct = productCurrent.priceNew * item.quantity;
+
+    // console.log(productCurrent.totalPriceProduct);
     item.infoProduct = productCurrent;
     cartCurrent.totalPrice += productCurrent.totalPriceProduct;
   }
-
-    res.render("client/pages/cart/index.pug", {
+  // console.log(cartCurrent);
+  res.render("client/pages/cart/index.pug", {
     pageTitle: "Giỏ hàng",
     cartDetail: cartCurrent
   });
@@ -109,3 +114,27 @@ module.exports.delete = async (req, res) => {
     res.redirect("/cart");
   }
 }
+
+
+module.exports.update = async (req, res) => {
+  const idProduct = req.params.productId;
+  try{
+    await cartModel.updateOne({
+      _id: req.cookies.cartId,
+      'products.idProduct': idProduct
+    }, {
+      $set: {
+        'products.$.quantity': parseInt(req.params.quantity)
+      }
+     
+    });
+    req.flash("success", "Cập nhật thành công!");
+    res.redirect("/cart/detail");
+  }
+  catch(error){
+    req.flash("error", "Lỗi!");
+    res.redirect("/cart/detail");
+  }
+}
+
+

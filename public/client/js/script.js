@@ -44,3 +44,24 @@ if(hidden){
   }, time);
 }
 // End an thong bao khi thay doi trang thai san pham
+
+
+// Thay doi so luong san pham cua gio hang
+
+const tableCart = document.querySelector("table[cart]");
+if(tableCart){
+  const products = tableCart.querySelectorAll("td input[change-quantity-item]");
+
+  products.forEach(item => {
+    item.addEventListener("change", () => {
+      const productId = item.getAttribute("item-id");
+      const quantity = parseInt(item.value);
+      console.log(quantity);
+      if(productId &&  quantity > 0){
+        window.location.href = `/cart/update/${productId}/${quantity}`;
+      }
+    });
+  });
+}
+
+// End Thay doi so luong san pham cua gio hang

@@ -9,7 +9,7 @@ block main
 
     .row
       .col-12
-        table(class="table table-bordered")
+        table(class="table table-bordered" cart)
           thead
             tr
               th STT
@@ -37,11 +37,13 @@ block main
                   td #{product.infoProduct.priceNew}$
                   td
                     input(
+                      change-quantity-item
                       type="number"
                       name="quantity"
                       value=product.quantity
+                      max=`${product.infoProduct.stock}`
                       min="1"
-                      item-id=""
+                      item-id= `${product.idProduct}`
                       style="width: 60px"
                     )
                   td #{product.infoProduct.totalPriceProduct}$
