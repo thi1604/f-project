@@ -6,9 +6,10 @@ router.post("/add/:productId", controller.addPost);
 
 router.get("/detail", controller.detail);
 
+router.patch("/detail", controller.detailPatch);
+
 router.get("/delete/:id", controller.delete);
 
 router.get("/update/:productId/:quantity", controller.update);
-
 
 module.exports = router;

@@ -12,6 +12,10 @@ block main
         table(class="table table-bordered" cart)
           thead
             tr
+              if (cartDetail.chooseAll == true)
+                th Chọn <input choose-all-cart type="checkbox" checked>
+              else 
+                th Chọn <input choose-all-cart type="checkbox">
               th STT
               th Ảnh
               th Tên
@@ -23,6 +27,13 @@ block main
             if(cartDetail.products.length > 0)
               each product, index in cartDetail.products
                 tr
+                  td 
+                    input(
+                      product-in-cart 
+                      type="checkbox" 
+                      product-id=`${product.infoProduct.id}`
+                      checked=product.choose=="true"? true : false
+                      ) 
                   td #{index + 1}
                   td
                     img(

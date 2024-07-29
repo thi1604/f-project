@@ -76,7 +76,7 @@ module.exports.detail = async (req, res) => {
     // console.log("ok");
     const productCurrent = await product.findOne({
       _id: item.idProduct
-    }).select("thumbnail price title discountPercentage stock slug"); 
+    }).select("thumbnail price title discountPercentage stock slug id"); 
     
     // console.log(productCurrent);
 
@@ -85,13 +85,61 @@ module.exports.detail = async (req, res) => {
 
     // console.log(productCurrent.totalPriceProduct);
     item.infoProduct = productCurrent;
-    cartCurrent.totalPrice += productCurrent.totalPriceProduct;
+    if(item.choose == "true")
+      cartCurrent.totalPrice += productCurrent.totalPriceProduct;
   }
-  // console.log(cartCurrent);
+
   res.render("client/pages/cart/index.pug", {
     pageTitle: "Giỏ hàng",
     cartDetail: cartCurrent
   });
+}
+
+module.exports.detailPatch = async (req, res) => {
+    const listProductId = req.body;
+    const productsInCart = await cartModel.findOne({
+      _id: req.cookies.cartId
+    });
+    //Neu user chon toan bo, cho hien thi checked tren nut checkall
+    if(listProductId.length == productsInCart.products.length){
+      await cartModel.updateOne({
+        _id: req.cookies.cartId
+      },{
+        chooseAll: true
+      });
+    }
+    else{
+      await cartModel.updateOne({
+        _id: req.cookies.cartId
+      },{
+        chooseAll: false
+      });
+    }
+
+    for (const item of productsInCart.products) {
+      await cartModel.updateOne({
+        _id: req.cookies.cartId,
+        'products.idProduct': item.idProduct
+      }, {
+        $set: {
+          'products.$.choose': "false"
+        }
+      });
+    }
+    if(listProductId)
+      for (const item of listProductId) {
+        await cartModel.updateOne({
+          _id: req.cookies.cartId,
+          'products.idProduct': item
+        }, {
+          $set: {
+            'products.$.choose': "true"
+          }
+        });
+      }
+    res.json({
+      code: 200
+    });
 }
 
 module.exports.delete = async (req, res) => {

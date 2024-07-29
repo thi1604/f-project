@@ -63,5 +63,90 @@ if(tableCart){
     });
   });
 }
-
 // End Thay doi so luong san pham cua gio hang
+
+// Chon tat ca san pham ben cart
+const chooseAll = document.querySelector("input[choose-all-cart]");
+if(chooseAll){
+  chooseAll.addEventListener("click", () => {
+    const check = chooseAll.checked;
+    const listProducts = tableCart.querySelectorAll("td input[product-in-cart]");
+    if(listProducts.length > 0){
+      const arrayProductId = [];
+      listProducts.forEach(item => {
+        item.checked = check;
+        if(check == true)
+          arrayProductId.push(item.getAttribute("product-id"));
+      });
+      // callAPI tinh tong tien trong gio hang
+      const path = "/cart/detail";
+      fetch(path,{
+        method : "PATCH",
+        headers: {
+          "Content-Type": "application/json",
+        }, 
+        body: JSON.stringify(arrayProductId)
+      })
+        .then(res => res.json())
+        .then(data => {
+          if(data.code == 200)
+            window.location.reload();
+        })
+    }
+  });
+}
+// End Chon tat ca san pham ben cart
+
+
+// Check choose all
+
+if(chooseAll){
+  const listProducts = tableCart.querySelectorAll("td input[product-in-cart]");
+  const lengthAll = listProducts.length;
+  listProducts.forEach(item=> {
+    item.addEventListener("click", ()=>{
+      const listProductsChooosed = tableCart.querySelectorAll("td input[product-in-cart]:checked");
+      // Call api cho cac san pham checked de hien thi ra giao dien
+      const arrayProductId = [];
+      listProductsChooosed.forEach(item => {
+        arrayProductId.push(item.getAttribute("product-id"));
+      });
+
+      const path = "/cart/detail";
+      fetch(path,{
+        method : "PATCH",
+        headers: {
+          "Content-Type": "application/json",
+        }, 
+        body: JSON.stringify(arrayProductId)
+      })
+        .then(res => res.json())
+        .then(data => {
+          if(data.code == 200)
+            window.location.reload();
+        })
+      
+      if(lengthAll > 0 && lengthAll == listProductsChooosed.length){
+          chooseAll.checked = true;
+        }
+        else
+          chooseAll.checked = false;
+    });
+  });
+}
+
+// End Check choose all
+
+
+
+// Chon san pham ben cart
+
+// if(chooseAll){
+//   const listProducts = tableCart.querySelectorAll("td input[product-in-cart]");
+//   if(listProducts.length > 0){
+//     listProducts
+//   }
+// }
+
+
+// End Chon san pham ben cart
