@@ -28,12 +28,15 @@ block main
               each product, index in cartDetail.products
                 tr
                   td 
-                    input(
-                      product-in-cart 
-                      type="checkbox" 
-                      product-id=`${product.infoProduct.id}`
-                      checked=product.choose=="true"? true : false
-                      ) 
+                    if(product.quantity > product.infoProduct.stock)
+                      p Không đủ số lương hoặc hết hàng!
+                    else 
+                      input(
+                        product-in-cart 
+                        type="checkbox" 
+                        product-id=`${product.infoProduct.id}`
+                        checked=product.choose=="true"? true : false
+                        ) 
                   td #{index + 1}
                   td
                     img(

@@ -18,15 +18,21 @@ module.exports.index = async (req, res) => {
     if(item.choose == "true"){
       const product = await productModel.findOne({
         _id: item.idProduct
-      }).select("title price discountPercentage thumbnail");
+      }).select("title price discountPercentage thumbnail stock"); 
+
+      await productModel.updateOne({
+        _id: item.idProduct
+      }, {
+        stock: (product.stock - item.quantity)
+      });
 
       if(product){
         product.priceNew = parseInt(((1 - product.discountPercentage/100) * product.price).toFixed(0));
         product.totalPriceNew =  parseInt(product.priceNew * item.quantity);
         totalPrice += product.totalPriceNew;
         item.infoProduct = product;
+        listProductsChoosed.push(item);
       }
-      listProductsChoosed.push(item);
     }
   }
   //End Lay ra cac san pham user da chon

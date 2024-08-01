@@ -80,6 +80,14 @@ module.exports.detail = async (req, res) => {
     
     // console.log(productCurrent);
 
+    //Check so luong san pham trong gio hang co lon hon stock
+    // if(item.quantity > productCurrent.stock){
+    //   item.quantity = productCurrent.stock;
+
+    // }
+    //EndCheck so luong san pham trong gio hang co lon hon stock
+
+
     productCurrent.priceNew = parseInt(((1 - productCurrent.discountPercentage/100) * productCurrent.price).toFixed(0));
     productCurrent.totalPriceProduct = productCurrent.priceNew * item.quantity;
 
