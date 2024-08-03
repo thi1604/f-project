@@ -137,7 +137,7 @@
   
 .sub-menu ul li ul {
     right: 100%;
-    top: 0;
+    top: 10px;
 }
   
 .sub-menu ul li:hover > ul {

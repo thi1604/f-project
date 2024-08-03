@@ -65,7 +65,7 @@ module.exports.orderPost = async (req, res) => {
         }, {
           stock: (product.stock - item.quantity)
         });
-        
+
         //Cap nhat lai san pham trong gio hang
         await cartModel.updateOne({
           _id: req.cookies.cartId,
