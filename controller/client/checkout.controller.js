@@ -78,6 +78,11 @@ module.exports.orderPost = async (req, res) => {
           }
         });
         //End Cap nhat lai san pham trong gio hang
+
+
+
+
+        
       }
       //Tao object productInCheckout de luu vao database
       const productInCheckout = {
