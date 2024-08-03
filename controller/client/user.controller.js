@@ -40,8 +40,7 @@ module.exports.registerPost = async (req, res) => {
   const user = new userModel(req.body);
   await user.save();
   const time = 24 * 3 * 60 * 60 * 1000;
-
-  res.cookie("tokenUser", user.tokenUser, {expire : new Date() + time});
+  res.cookie("tokenUser", user.tokenUser, { expires: new Date(Date.now() + time)});
 
   req.flash("success", "Đăng kí thành công!");
   res.redirect("/");

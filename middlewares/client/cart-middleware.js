@@ -9,7 +9,7 @@ module.exports = async (req, res, next) => {
     const newCart = new cartModel();
     await newCart.save();
     const time = 360 * 24 * 60 * 60 * 1000;
-    res.cookie("cartId", newCart.id, { expires: new Date(Date.now() + time)});
+    res.cookie("cartId", newCart.id, { expire: new Date(Date.now() + time)});
   }
   else{
     const currentCart = await cartModel.findOne({
