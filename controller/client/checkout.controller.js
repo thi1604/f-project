@@ -59,6 +59,7 @@ module.exports.orderPost = async (req, res) => {
       }).select("price discountPercentage stock");
       
       if(product){
+        //
         //Cap nhat lai stock trong collection products
         await productModel.updateOne({
           _id: item.idProduct
