@@ -4,7 +4,6 @@ const product = require("../../models/product.model");
 
 module.exports.addPost = async (req, res) => {
   try{
-
     const productId = req.params.productId;
 
     const cartId = req.cookies.cartId;
@@ -13,7 +12,7 @@ module.exports.addPost = async (req, res) => {
       _id: productId
     }); //Bat loi try catch khi user gui sai id product
     
-    if(!productCurrent){
+    if(!productCurrent && productCurrent.stock == 0){
       req.flash("error", "Lỗi!");
       res.redirect('/products');
       return;
