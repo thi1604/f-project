@@ -45,3 +45,41 @@ module.exports.registerPost = async (req, res) => {
   req.flash("success", "Đăng kí thành công!");
   res.redirect("/");
 }
+
+module.exports.login = async (req, res) => {
+  res.render("client/pages/user/login.pug", {
+    pageTitle: "Trang đăng nhập"
+  });
+}
+
+module.exports.loginPost = async (req, res) => {
+  const emailCurrent = req.body.email;
+  const user = await userModel.findOne({
+    email : emailCurrent
+  });
+  if(!user){
+    req.flash("error", "Sai thông tin email!");
+    res.redirect("back");
+    return;
+  }
+  if(md5(req.body.password) != user.password){
+    req.flash("error", "Sai mật khẩu!");
+    res.redirect("back");
+    return;
+  }
+  if(user.status == "inactive" || user.deleted == true){
+    req.flash("error", "Tài khoản đã khóa hoặc đã xóa!");
+    res.redirect("back");
+    return;
+  }
+  req.flash("success", "Đăng nhập thành công!");
+  const time = 24 * 3 * 60 * 60 * 1000;
+  res.cookie("tokenUser", user.tokenUser, { expires: new Date(Date.now() + time)});
+  res.redirect("/");
+}
+
+
+module.exports.logout = async (req, res) => {
+  res.clearCookie("tokenUser");
+  res.redirect("/user/login");
+}
