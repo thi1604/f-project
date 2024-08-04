@@ -17,4 +17,12 @@ router.get("/password/forgot", controller.forgotPassword);
 
 router.post("/password/forgot", controller.forgotPasswordPost);
 
+router.get("/password/check-otp", controller.checkOtp);
+
+router.post("/password/check-otp", controller.checkOtpPost);
+
+router.get("/password/reset-password", controller.resetPassword);
+
+router.patch("/password/reset-password", controller.resetPasswordPatch);
+
 module.exports = router;

@@ -113,9 +113,85 @@ module.exports.forgotPasswordPost = async (req, res) => {
 
   const data = new forgotPasswordModel(dataEmail);
   await data.save();
+  
+  const idUser = await userModel.findOne({
+    email: dataEmail.email
+  }).select("id");
 
-  console.log(dataEmail);
-  res.send("ok");
-  // res.redirect(`/user/password/check-otp?email?${emailCurrent.email}`);
+  res.cookie("idUser", idUser.id);
+
+  // res.send("ok");
+  res.redirect(`/user/password/check-otp?email=${emailCurrent.email}`);
 }
 
+
+module.exports.checkOtp = async (req, res) => {
+  const email = req.query.email;
+  res.render("client/pages/user/check-otp.pug", {
+    pageTitle: "Check otp",
+    email: email
+  });
+}
+
+module.exports.checkOtpPost = async (req, res) => {
+  const {email, otp} = req.body;
+  if(!otp){
+    req.flash("error", "Lỗi!");
+    res.redirect("back");
+    return;
+  }
+  const otpReal = await forgotPasswordModel.findOne({
+    email: email,
+    otp: otp
+  });
+
+  if(!otpReal){
+    req.flash("error", "Mã otp không chính xác!");
+    res.redirect("back");
+    return;
+  }
+
+  res.redirect("/user/password/reset-password");
+}
+
+
+module.exports.resetPassword = async (req, res) => {
+  // if(!req.cookies.otp){
+  //   res.redirect("/user/password/forgot");
+  //   return;
+  // }
+  res.render("client/pages/user/reset-password.pug", {
+    pageTitle: "Tạo lại mật khẩu mới"
+  });
+}
+
+module.exports.resetPasswordPatch = async (req, res) => {
+  if(!req.cookies.idUser){
+    req.flash("error", "Otp đã hết hạn!");
+    res.redirect("/user/password/forgot");
+    return;
+  }
+  if(!req.body.password){
+    req.flash("error", "Lỗi!");
+    res.redirect("/user/password/forgot");
+    return;
+  }
+  // console.log(req.body);
+  
+  const newPassword = md5(req.body.password);
+  // console.log(newPassword);
+  await userModel.updateOne({
+    _id: req.cookies.idUser
+  }, {
+    password: newPassword
+  });
+
+  const user = await userModel.findOne({
+    _id: req.cookies.idUser
+  }).select("tokenUser");
+
+  req.flash("success", "Mật khẩu của bạn đã được đổi!");
+  res.clearCookie("idUser");
+  res.cookie("tokenUser", user.tokenUser);
+  res.redirect("/");
+}
