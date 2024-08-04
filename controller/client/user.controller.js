@@ -83,3 +83,10 @@ module.exports.logout = async (req, res) => {
   res.clearCookie("tokenUser");
   res.redirect("/user/login");
 }
+
+module.exports.forgotPassword = async (req, res) => {
+  res.render("client/pages/user/forgot-password.pug", {
+    pageTitle: "Lấy lại mật khẩu"
+  });
+}
+
