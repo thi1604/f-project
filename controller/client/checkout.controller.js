@@ -1,7 +1,7 @@
 const cartModel = require("../../models/cart.model");
 const productModel = require("../../models/product.model");
 const checkoutModel = require("../../models/checkout.model");
-
+const sendEmailHelper = require("../../helper/sendEmail.helper");
 module.exports.index = async (req, res) => {
   // Lay ra cac san pham user da chon
   const cartId = req.cookies.cartId;
@@ -92,6 +92,9 @@ module.exports.orderPost = async (req, res) => {
 
   const record = new checkoutModel(newCheckout);
   await record.save();
+
+  sendEmailHelper.sendEmail(req.body.mail, `Thông báo xác nhận đơn hàng #${record.id}`, `<b>Cám ơn bạn đã mua hàng!</b><br>
+  Xin chào ${record.userInfor.fullName}!, Chúng tôi đã nhận được đặt hàng của bạn và đã sẵn sàng để vận chuyển. Chúng tôi sẽ thông báo cho bạn khi đơn hàng được gửi đi.`)
 
   res.redirect(`/checkout/success/${record.id}`);
 };
