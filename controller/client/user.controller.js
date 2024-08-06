@@ -2,7 +2,7 @@ const userModel = require("../../models/user.model");
 const helper = require("../../helper/generate.helper");
 const md5 = require("md5");
 const forgotPasswordModel = require("../../models/forgot-password.model");
-
+const helperSendEmail = require("../../helper/sendEmail.helper");
 module.exports.register = async (req, res) => {
   res.render("client/pages/user/register.pug", {
     pageTitle: "Trang đăng kí"
@@ -102,9 +102,14 @@ module.exports.forgotPasswordPost = async (req, res) => {
     res.redirect("back");
     return;
   }
-
+  //Tao ma otp, gui otp ve mail user
   const otp = helper.generateRandomNumber(6);
 
+  helperSendEmail.sendEmail(
+    emailCurrent.email,
+    "Mã OTP LẤY LẠI MẬT KHẨU.",
+    `Mã xác thực của bạn là <b style ="color: green">${otp}</b>, có hiệu lực trong 3 phút. Vui lòng không chia sẻ mã cho bất kì ai.`
+  )
   const dataEmail = {
     email: emailCurrent.email,
     otp: otp,
@@ -192,6 +197,7 @@ module.exports.resetPasswordPatch = async (req, res) => {
 
   req.flash("success", "Mật khẩu của bạn đã được đổi!");
   res.clearCookie("idUser");
-  res.cookie("tokenUser", user.tokenUser);
+  const time = 3 * 24 * 60 * 60 * 1000;
+  res.cookie("tokenUser", user.tokenUser, { expires: new Date(Date.now() + time)});
   res.redirect("/");
 }
