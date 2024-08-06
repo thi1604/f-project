@@ -6,6 +6,7 @@ const rolesRouter = require("./roles.router");
 const accountsRouter = require("./accounts.router");
 const authRouter = require("./auth.route");
 const profileRouter = require("./profile.router");
+const settingRouter = require("./setting.route");
 
 const prefixUrl = require("../../config/system.js");
 const authMiddleware = require("../../middlewares/admin/auth-middlewares");
@@ -42,5 +43,10 @@ module.exports.index = (app) => {
     );
     
     app.use(`/${name}/auth`, authRouter);
+
+    app.use(`/${name}/setting`, 
+        authMiddleware, 
+        settingRouter
+    );
 
 };

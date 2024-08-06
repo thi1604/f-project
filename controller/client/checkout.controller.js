@@ -94,7 +94,7 @@ module.exports.orderPost = async (req, res) => {
   await record.save();
 
   sendEmailHelper.sendEmail(req.body.mail, `Thông báo xác nhận đơn hàng #${record.id}`, `<b>Cám ơn bạn đã mua hàng!</b><br>
-  Xin chào ${record.userInfor.fullName}!, Chúng tôi đã nhận được đặt hàng của bạn và đã sẵn sàng để vận chuyển. Chúng tôi sẽ thông báo cho bạn khi đơn hàng được gửi đi.`)
+  Xin chào ${record.userInfo.fullName}!, Chúng tôi đã nhận được đặt hàng của bạn và đã sẵn sàng để vận chuyển. Chúng tôi sẽ thông báo cho bạn khi đơn hàng được gửi đi.`)
 
   res.redirect(`/checkout/success/${record.id}`);
 };

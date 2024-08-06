@@ -6,7 +6,7 @@ header.header
       .col-3
         .inner-logo
           a(href="/")
-            img(src="/client/images/logo.svg", alt="Logo")
+            img(src=setting ? setting.logo : " ", alt="Logo")
       .col-5
         form(
           action="/search"
