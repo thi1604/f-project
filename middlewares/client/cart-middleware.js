@@ -15,7 +15,8 @@ module.exports = async (req, res, next) => {
     const currentCart = await cartModel.findOne({
       _id: cartId
     });
-    res.locals.cartTotal = currentCart.products.length;
+    if(currentCart)
+      res.locals.cartTotal = currentCart.products.length;
   }
   next();
 };

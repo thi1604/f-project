@@ -9,7 +9,6 @@ const userRouter = require("../../routes/client/user.route");
 const middlewareUser = require("../../middlewares/client/user-middleware");
 const middlewareSetting = require("../../middlewares/client/setting-middleware");
 
-
 module.exports.index = (app) => {
     app.use(middlewareCategory.category);
     app.use(middlewareCartId);

@@ -138,3 +138,36 @@ module.exports.detail = async (req, res)=>{
     product : item
   });
 }
+
+//ChangeStatus
+
+module.exports.changeStatus = async (req, res) => {
+  const {id, status} = req.params;
+  try{
+    const admin = await account.findOne({
+      _id: id
+    });
+
+    if(admin && (status == "active" || status == "inactive")){
+      await account.updateOne({
+        _id : id
+      }, {
+        status: status
+      });
+      req.flash("success", "Cập nhật thành công!");
+    }
+    else{
+      req.flash("error", "Lỗi!");
+    }
+
+  }
+  catch(error){
+    req.flash("error", "Lỗi!");
+  }
+
+  res.json({
+    code: 200
+  });
+}
+
+//End ChangeStatus

@@ -43,16 +43,16 @@ block main
                 td #{item.email}
                 td
                   if (item.status === "active")
-                    a(
-                      href="javascript:;"
+                    button(
+                      link=`/${prefix}/accounts/change-status/${item.id}/inactive`
                       class="badge badge-success"
-                      data-status="active"
+                      data-status="inactive"
                     ) Hoạt động
                   else
-                    a(
-                      href="javascript:;"
+                    button(
+                      link=`/${prefix}/accounts/change-status/${item.id}/active`
                       class="badge badge-danger"
-                      data-status="inactive"
+                      data-status="active"
                     ) Dừng hoạt động
                 td
                   a(

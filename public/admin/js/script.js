@@ -383,6 +383,29 @@ if(tablePermissions){
 }
 // End Phan quyen cho nhom quyen(Quan trong)
 
+//Change status for accounts 
+const listButtonChange = document.querySelectorAll(`button[data-status]`);
+if(listButtonChange.length > 0){
+  listButtonChange.forEach((item) => {
+    item.addEventListener("click", () => {
+      const link = item.getAttribute("link");
+      fetch(link, {
+        method: "PATCH",
+        headers: {
+          "Content-Type": "application/json",
+        }
+      })
+      .then(res=>res.json())
+      .then(data => {
+        if(data.code == 200)
+          window.location.reload();
+      })
+    });
+  });
+}
+//End Change status for accounts 
+
+
 
 
 

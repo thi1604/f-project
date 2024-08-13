@@ -3,6 +3,8 @@ const helper = require("../../helper/generate.helper");
 const md5 = require("md5");
 const forgotPasswordModel = require("../../models/forgot-password.model");
 const helperSendEmail = require("../../helper/sendEmail.helper");
+
+
 module.exports.register = async (req, res) => {
   res.render("client/pages/user/register.pug", {
     pageTitle: "Trang đăng kí"
