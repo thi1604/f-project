@@ -22,6 +22,9 @@ module.exports.index = async (req, res) => {
     .find(filter).skip(pagination.skip).limit(pagination.limitItems).select("-description")
     .sort({position : "desc"});
 
+    for (const item of listProduct) {
+        item.priceNew = ((1 - item.discountPercentage/100) * item.price).toFixed(0);
+    }
     
     res.render("client/pages/product/index.pug", {
         pageTitle: "Tất cả sản phẩm",

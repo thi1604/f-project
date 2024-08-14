@@ -6,7 +6,7 @@
 }
 
 .header .inner-logo img {
-    max-height: 50px;
+    max-height: 100px;
     max-width: 100%;
 }
 
@@ -76,6 +76,12 @@
 .product-item .inner-content .inner-title {
     font-size: 20px;
     font-weight: 600;
+    color: #1c08f4;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    -webkit-line-clamp: 1;
+    -webkit-box-orient: vertical;
+    display: -webkit-box;
 }
 
 .product-item .inner-content .inner-price-new {

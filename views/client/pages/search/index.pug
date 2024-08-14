@@ -5,4 +5,5 @@ include ../../mixins/pagination.pug
 
 block main
     +list-products-standard(title, products)
-    +pagination(pagination)
+    .container(style="display: flex")
+        +pagination(pagination)
