@@ -18,4 +18,6 @@ router.patch("/permissions", controller.permissionsPatch);
 
 router.get("/detail/:id", controller.detail);
 
+router.patch("/delete/:id", controller.deletePatch);
+
 module.exports = router;

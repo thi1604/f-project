@@ -22,9 +22,28 @@
           a(href=`/${prefix}/accounts`) Tài khoản admin
       if(role.permissions.includes("trash_view"))
         li
-            a(
-              class = "trash"
-              href=`/${prefix}/trash`
-            ) Thùng rác
+          //- a(
+          //-   class = "trash"
+          //-   href=`/${prefix}/trash`
+          //- ) Thùng rác
+          .btn-group.dropup.trash
+            button.btn.btn-secondary.dropdown-toggle(type='button' data-toggle='dropdown' aria-expanded='false')
+              | Thùng rác
+            .dropdown-menu
+              a(
+                class = "dropdown-item"
+                href=`/${prefix}/trash/products`
+              ) Sản phẩm
+              a(
+                class = "dropdown-item"
+                href=`/${prefix}/trash/role`
+              ) Nhóm quyền
+              a(
+                class = "dropdown-item"
+                href=`/${prefix}/trash`
+              ) Tài khoản admin
+              
+              
+
         li
           a(href=`/${prefix}/setting/general`) Cài đặt chung

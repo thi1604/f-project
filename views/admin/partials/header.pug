@@ -3,13 +3,16 @@ header.header
     .row.align-items-center
       .col-3
         .inner-logo
-          a(href="/admin") ADMIN
-      div(class="col-9 text-right")
+          a(href=`/${prefix}/dashboard`) ADMIN
+      div(class="col-9 sub-header-right")
+        a(href=`/${prefix}/profile`)
+          .avatar-admin
+            img(src=account.avatar, 
+            alt=account.fullName
+            )
         a(
-          href=`/${prefix}/profile`
-          class="btn btn-info btn-sm"
-        ) #{account.fullName}
-        a(
+          class="btn btn-danger btn-sm"
           href=`/${prefix}/auth/logout`
-          class="btn btn-danger btn-sm ml-2"
         ) Đăng xuất
+
+        //- class="btn btn-info btn-sm"

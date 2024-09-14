@@ -40,6 +40,12 @@ app.locals.prefix = prefixUrlAdmin;
 routeClient.index(app);
 routeAdmin.index(app);
 
+app.get("*", (req, res)=> {
+    res.render('client/pages/errors/404.pug', {
+        pageTitle: "Page Not Found"
+    });
+});
+
 app.listen(port, () => {
     console.log(`Dang chay cong ${port}`);
 });

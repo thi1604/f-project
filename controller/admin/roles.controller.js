@@ -5,13 +5,13 @@ const moment = require("moment");
 const account = require("../../models/accounts.model");
 
 module.exports.index = async (req, res)=>{
-  let records  = await roles.find({
+  const filter = {
     deleted: false
-  });
+  }
 
-  const Pagination = await pagination(req, records, "roles");
+  const Pagination = await pagination(req, filter, "roles");
 
-  records = await roles.find(
+  const records = await roles.find(
     {deleted: false}
   )
   .skip(Pagination.skip)
@@ -150,4 +150,31 @@ module.exports.detail = async (req, res)=>{
     pageTitle: "Chi tiết nhóm quyền",
     product : item
   });
+}
+
+module.exports.deletePatch = async (req, res)=>{
+  try {
+    const id = req.body.idRole;
+    const item = roles.findOne({
+      _id: id
+    });
+    if(!item){
+      req.flash("error", "Lỗi!");
+    }
+    else{
+      await roles.updateOne({
+        _id: id
+      }, {
+        deleted: true
+      });
+      req.flash("success", "Xóa thành công!");
+      res.json({
+        code: 200
+      });
+    }
+  } catch (error) {
+    req.flash("error", "Lỗi!");
+  }
+
+  
 }

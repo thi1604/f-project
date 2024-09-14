@@ -398,12 +398,39 @@ if(listButtonChange.length > 0){
       .then(res=>res.json())
       .then(data => {
         if(data.code == 200)
-          window.location.reload();
+          window.local.reload();
       })
     });
   });
 }
-//End Change status for accounts 
+// End Change status for accounts 
+
+// Delete role admin 
+const listButtonDeleteRole = document.querySelectorAll("[delete-role-id]");
+if(listButtonDeleteRole.length > 0) {
+  listButtonDeleteRole.forEach(item => {
+    item.addEventListener("click", ()=>{
+      const link = item.getAttribute("link");
+      const data = {
+        idRole: item.getAttribute("delete-role-id")
+      };
+      fetch(link, {
+        method: "PATCH",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(data)
+      })
+      .then(res=> res.json())
+      .then(data => {
+        if(data.code == 200)
+          window.location.reload();
+      })
+      
+    });
+  });
+} 
+// End Delete role admin 
 
 
 

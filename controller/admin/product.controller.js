@@ -244,7 +244,6 @@ module.exports.createPost = async (req, res) => {
   }
 };
 
-
 module.exports.edit = async (req, res) => {
   try{
     const id = req.params.id;
@@ -309,36 +308,41 @@ module.exports.editPatch = async (req, res) => {
 }
 
 module.exports.detail = async (req, res)=>{
-  const id = req.params.id;
-  const item = await product.findOne({
-    _id : id
-  });
-
-  item.formatCreatedAt = moment(item.createdAt).format("HH:mm:ss DD/MM/YY");
-  item.formatUpdatedAt = moment(item.updatedAt).format("HH:mm:ss DD/MM/YY");
-
-
-  //Lay ra nguoi tao
-  const account = await Account.findOne({
-    _id: item.idPersonCreated
-  }).select("fullName");
-  //Het lay ra nguoi tao
-
-  //Lay ra nguoi updated
-  const accountUpdated = await Account.findOne({
-    _id: item.idPersonUpdated
-  }).select("fullName");
-  //End lay ra nguoi updated
-
-  if(accountUpdated){
-    item.namePersonUpdated = accountUpdated.fullName;
-  }
-  if(account){
-    item.namePersonCreated = account.fullName;
-  }
+  try {
+    error
+    const id = req.params.id;
+    const item = await product.findOne({
+      _id : id
+    });
   
-  res.render(`${prefix}/pages/products/detail.pug`,{
-    pageTitle: "Chi tiết sản phẩm",
-    product : item
-  });
+    item.formatCreatedAt = moment(item.createdAt).format("HH:mm:ss DD/MM/YY");
+    item.formatUpdatedAt = moment(item.updatedAt).format("HH:mm:ss DD/MM/YY");
+  
+  
+    //Lay ra nguoi tao
+    const account = await Account.findOne({
+      _id: item.idPersonCreated
+    }).select("fullName");
+    //Het lay ra nguoi tao
+  
+    //Lay ra nguoi updated
+    const accountUpdated = await Account.findOne({
+      _id: item.idPersonUpdated
+    }).select("fullName");
+    //End lay ra nguoi updated
+  
+    if(accountUpdated){
+      item.namePersonUpdated = accountUpdated.fullName;
+    }
+    if(account){
+      item.namePersonCreated = account.fullName;
+    }
+    
+    res.render(`${prefix}/pages/products/detail.pug`,{
+      pageTitle: "Chi tiết sản phẩm",
+      product : item
+    });
+  } catch (error) {
+    res.send("403");
+  }
 }

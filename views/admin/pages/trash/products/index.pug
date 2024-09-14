@@ -1,13 +1,13 @@
-extends ../../layouts/default.pug
-include ../../mixins/filter.pug
-include ../../mixins/search.pug
-include ../../mixins/pagination.pug
-include ../../mixins/box-actions.pug
+extends ../../../layouts/default.pug
+include ../../../mixins/filter.pug
+include ../../../mixins/search.pug
+include ../../../mixins/pagination.pug
+include ../../../mixins/box-actions.pug
 
 
 block main
   if(role.permissions.includes("trash_view"))
-    h1(class="mb-4") Thùng rác
+    h1(class="mb-4") Thùng rác sản phẩm
     .card.mb-3
       .card-header Bộ lọc và Tìm kiếm
       .card-body
@@ -81,12 +81,12 @@ block main
                   button(
                     class="btn btn-warning btn-sm"
                     restore-item
-                    link-id-button-trash = `/${prefix}/trash/restore/${item.id}`
+                    link-id-button-trash = `/${prefix}/trash/products/restore/${item.id}`
                   ) Khôi phục
                   button(
                     class="btn btn-danger btn-sm ml-1"
                     permanently-deleted
-                    link-id-button-trash = `/${prefix}/trash/permanently-deleted/${item.id}`
+                    link-id-button-trash = `/${prefix}/trash/products/permanently-deleted/${item.id}`
       
                   ) Xóa vĩnh viễn
                 td

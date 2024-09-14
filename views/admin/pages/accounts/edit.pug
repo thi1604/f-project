@@ -5,7 +5,7 @@ block main
     h1(class="mb-4") Chỉnh sửa tài khoản
 
     form(
-      action=`/${prefix}/accounts/edit/${account.id}?_method=PATCH`
+      action=`/${prefix}/accounts/edit/${Account.id}?_method=PATCH`
       method="POST"
       enctype="multipart/form-data"
     )
@@ -17,7 +17,7 @@ block main
           id="fullName"
           name="fullName"
           required
-          value=account.fullName
+          value=Account.fullName
         )
       div(class="form-group")
         label(for="email") Email *
@@ -27,7 +27,7 @@ block main
           id="email"
           name="email"
           required
-          value=account.email
+          value=Account.email
         )
       div(class="form-group")
         label(for="password") Mật khẩu
@@ -44,7 +44,7 @@ block main
           class="form-control"
           id="phone"
           name="phone"
-          value=account.phone
+          value=Account.phone
         )
       div(
         class="form-group"
@@ -60,7 +60,7 @@ block main
           upload-image-input
         )
         img(
-          src=account.avatar
+          src=Account.avatar
           class="image-preview"
           upload-image-preview
         )
@@ -80,7 +80,7 @@ block main
           id="statusActive"
           name="status"
           value="active"
-          checked=(account.status == "active" ? true : false)
+          checked=(Account.status == "active" ? true : false)
         )
         label(for="statusActive" class="form-check-label") Hoạt động
       div(class="form-group form-check form-check-inline")
@@ -90,7 +90,7 @@ block main
           id="statusInActive"
           name="status"
           value="inactive"
-          checked=(account.status == "inactive" ? true : false)
+          checked=(Account.status == "inactive" ? true : false)
         )
         label(for="statusInActive" class="form-check-label") Dừng hoạt động
       div(class="form-group")

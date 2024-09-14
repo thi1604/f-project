@@ -109,36 +109,40 @@ module.exports.editPatch = async (req, res)=> {
 }
 
 module.exports.detail = async (req, res)=>{
-  const id = req.params.id;
-  const item = await ProductCategory.findOne({
-    _id : id
-  });
-
-  item.formatCreatedAt = moment(item.createdAt).format("HH:mm:ss DD/MM/YY");
-  item.formatUpdatedAt = moment(item.updatedAt).format("HH:mm:ss DD/MM/YY");
-
-
-  //Lay ra nguoi tao
-  const accountCreated = await account.findOne({
-    _id: item.idPersonCreated
-  }).select("fullName");
-  //Het lay ra nguoi tao
-
-  //Lay ra nguoi updated
-  const accountUpdated = await account.findOne({
-    _id: item.idPersonUpdated
-  }).select("fullName");
-  //End lay ra nguoi updated
-
-  if(accountUpdated){
-    item.namePersonUpdated = accountUpdated.fullName;
+  try {
+    
+    const id = req.params.id;
+    const item = await ProductCategory.findOne({
+      _id : id
+    });
+  
+    item.formatCreatedAt = moment(item.createdAt).format("HH:mm:ss DD/MM/YY");
+    item.formatUpdatedAt = moment(item.updatedAt).format("HH:mm:ss DD/MM/YY");
+    
+    //Lay ra nguoi tao
+    const accountCreated = await account.findOne({
+      _id: item.idPersonCreated
+    }).select("fullName");
+    //Het lay ra nguoi tao
+  
+    //Lay ra nguoi updated
+    const accountUpdated = await account.findOne({
+      _id: item.idPersonUpdated
+    }).select("fullName");
+    //End lay ra nguoi updated
+  
+    if(accountUpdated){
+      item.namePersonUpdated = accountUpdated.fullName;
+    }
+    if(accountCreated){
+      item.namePersonCreated = accountCreated.fullName;
+    }
+  
+    res.render(`${prefix}/pages/products-category/detail.pug`,{
+      pageTitle: "Chi tiết nhóm quyền",
+      product : item
+    });
+  } catch (error) {
+    console.log("error");
   }
-  if(accountCreated){
-    item.namePersonCreated = accountCreated.fullName;
-  }
-
-  res.render(`${prefix}/pages/products-category/detail.pug`,{
-    pageTitle: "Chi tiết nhóm quyền",
-    product : item
-  });
 }
