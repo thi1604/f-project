@@ -68,17 +68,22 @@ module.exports.edit = async (req, res)=>{
 };
 
 module.exports.editPatch = async (req, res)=>{
-  if(res.locals.role.permissions.includes("roles_edit")){
-    const id = req.params.id;
-    req.body.idPersonUpdated = res.locals.account.id;
-    await roles.updateOne({
-      _id: id
-    }, req.body);
-    req.flash("success", "Đã cập nhật!");
-    res.redirect('back');
-  }
-
-  else{
+  try {
+    
+    if(res.locals.role.permissions.includes("roles_edit")){
+      const id = req.params.id;
+      req.body.idPersonUpdated = res.locals.account.id;
+      await roles.updateOne({
+        _id: id
+      }, req.body);
+      req.flash("success", "Đã cập nhật!");
+      res.redirect('back');
+    }
+  
+    else{
+      res.send("403");
+    }
+  } catch (error) {
     res.send("403");
   }
 
@@ -96,60 +101,70 @@ module.exports.permissions = async (req, res) =>{
 };
 
 module.exports.permissionsPatch = async (req, res) =>{
-  if(res.locals.role.permissions.includes("roles_permissions")){
-    const roleAndPermissions = req.body.rolesArray;
-
-    roleAndPermissions.forEach(async (item)=> {
-      await roles.updateOne({
-        _id: item.id,
-      }, {
-        permissions: item.permissions
+  try {
+    
+    if(res.locals.role.permissions.includes("roles_permissions")){
+      const roleAndPermissions = req.body.rolesArray;
+  
+      roleAndPermissions.forEach(async (item)=> {
+        await roles.updateOne({
+          _id: item.id,
+        }, {
+          permissions: item.permissions
+        });
       });
-    });
-
-    res.json({
-      code: 200
-    });
-
-  }
-  else{
-    res.send("403");
+  
+      res.json({
+        code: 200
+      });
+  
+    }
+    else{
+      res.send("403");
+    }
+  } catch (error) {
+      res.send("403");
   }
 };
 
 module.exports.detail = async (req, res)=>{
-  const id = req.params.id;
-  const item = await roles.findOne({
-    _id : id
-  });
-
-  item.formatCreatedAt = moment(item.createdAt).format("HH:mm:ss DD/MM/YY");
-  item.formatUpdatedAt = moment(item.updatedAt).format("HH:mm:ss DD/MM/YY");
-
-
-  //Lay ra nguoi tao
-  const accountCreated = await account.findOne({
-    _id: item.idPersonCreated
-  }).select("fullName");
-  //Het lay ra nguoi tao
-
-  //Lay ra nguoi updated
-  const accountUpdated = await account.findOne({
-    _id: item.idPersonUpdated
-  }).select("fullName");
-  //End lay ra nguoi updated
-
-  if(accountUpdated){
-    item.namePersonUpdated = accountUpdated.fullName;
+  try {
+    
+    const id = req.params.id;
+    const item = await roles.findOne({
+      _id : id
+    });
+  
+    item.formatCreatedAt = moment(item.createdAt).format("HH:mm:ss DD/MM/YY");
+    item.formatUpdatedAt = moment(item.updatedAt).format("HH:mm:ss DD/MM/YY");
+  
+  
+    //Lay ra nguoi tao
+    const accountCreated = await account.findOne({
+      _id: item.idPersonCreated
+    }).select("fullName");
+    //Het lay ra nguoi tao
+  
+    //Lay ra nguoi updated
+    const accountUpdated = await account.findOne({
+      _id: item.idPersonUpdated
+    }).select("fullName");
+    //End lay ra nguoi updated
+  
+    if(accountUpdated){
+      item.namePersonUpdated = accountUpdated.fullName;
+    }
+    if(accountCreated){
+      item.namePersonCreated = accountCreated.fullName;
+    }
+  
+    res.render(`${prefix}/pages/roles/detail.pug`,{
+      pageTitle: "Chi tiết nhóm quyền",
+      product : item
+    });
+  } catch (error) {
+    res.send("403");
   }
-  if(accountCreated){
-    item.namePersonCreated = accountCreated.fullName;
-  }
-
-  res.render(`${prefix}/pages/roles/detail.pug`,{
-    pageTitle: "Chi tiết nhóm quyền",
-    product : item
-  });
 }
 
 module.exports.deletePatch = async (req, res)=>{
@@ -174,7 +189,5 @@ module.exports.deletePatch = async (req, res)=>{
     }
   } catch (error) {
     req.flash("error", "Lỗi!");
-  }
-
-  
+  } 
 }

@@ -72,65 +72,80 @@ module.exports.indexProduct = async (req, res)=>{
 }
 
 module.exports.restoreProduct = async(req, res) => {
-  if(res.locals.role.permissions.includes("roles_permissions")){
-    const id = req.params.id;
-    await product.updateOne({
-      _id : id
-    }, 
-    {
-      deleted : false
-    });
-    req.flash('success', 'Khôi phục thành công!');
-    res.json({
-      code : 200
-    })
-  }
-  else
+  try {
+    
+    if(res.locals.role.permissions.includes("roles_permissions")){
+      const id = req.params.id;
+      await product.updateOne({
+        _id : id
+      }, 
+      {
+        deleted : false
+      });
+      req.flash('success', 'Khôi phục thành công!');
+      res.json({
+        code : 200
+      })
+    }
+    else
+      res.send("403");
+  } catch (error) {
     res.send("403");
+  }
 }
 
 module.exports.permanentlyDeletedProduct = async(req, res) => {
-  if(res.locals.role.permissions.includes("roles_permissions")){
-    const id = req.params.id;
+  try {
+    
+    if(res.locals.role.permissions.includes("roles_permissions")){
+      const id = req.params.id;
+    
+      await product.deleteOne({
+        _id : id
+      });
+      req.flash('success', 'Xóa thành công!');
+      res.json({
+        code : 200
+      })
+    }
   
-    await product.deleteOne({
-      _id : id
-    });
-    req.flash('success', 'Xóa thành công!');
-    res.json({
-      code : 200
-    })
-  }
-
-  else
+    else
+      res.send("403");
+  } catch (error) {
     res.send("403");
+  }
 }
 
 module.exports.changeManyItemProduct = async(req, res) => {
-  if(res.locals.role.permissions.includes("roles_permissions")){
-    const {ids, status} = req.body;
-
-    if(status == "restore"){
-      req.flash('success', 'Khôi phục thành công!');
-      await product.updateMany({
-        _id : ids
-      }, 
-      {
-        deleted: false
-      });
+  try {
+    
+    if(res.locals.role.permissions.includes("roles_permissions")){
+      const {ids, status} = req.body;
+  
+      if(status == "restore"){
+        req.flash('success', 'Khôi phục thành công!');
+        await product.updateMany({
+          _id : ids
+        }, 
+        {
+          deleted: false
+        });
+      }
+      else{
+        req.flash('success', 'Xóa thành công!');
+        await product.deleteMany({
+          _id: ids
+        });
+      }
+      res.json({
+        code : 200
+      })
     }
-    else{
-      req.flash('success', 'Xóa thành công!');
-      await product.deleteMany({
-        _id: ids
-      });
-    }
-    res.json({
-      code : 200
-    })
-  }
-  else
+    else
+      res.send("403");
+  } catch (error) {
     res.send("403");
+  }
 }
 
 //End product

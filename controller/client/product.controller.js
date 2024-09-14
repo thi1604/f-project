@@ -33,7 +33,6 @@ module.exports.index = async (req, res) => {
     });
 };
 
-
 module.exports.category = async (req, res) => {
     const idCategoryCurrent = await categoryModel.findOne({
         slug: req.params.slug,

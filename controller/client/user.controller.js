@@ -184,22 +184,25 @@ module.exports.resetPasswordPatch = async (req, res) => {
     return;
   }
   // console.log(req.body);
+  try {
+    const newPassword = md5(req.body.password);
+    // console.log(newPassword);
+    await userModel.updateOne({
+      _id: req.cookies.idUser
+    }, {
+      password: newPassword
+    });
   
-  const newPassword = md5(req.body.password);
-  // console.log(newPassword);
-  await userModel.updateOne({
-    _id: req.cookies.idUser
-  }, {
-    password: newPassword
-  });
-
-  const user = await userModel.findOne({
-    _id: req.cookies.idUser
-  }).select("tokenUser");
-
-  req.flash("success", "Mật khẩu của bạn đã được đổi!");
-  res.clearCookie("idUser");
-  const time = 3 * 24 * 60 * 60 * 1000;
-  res.cookie("tokenUser", user.tokenUser, { expires: new Date(Date.now() + time)});
-  res.redirect("/");
+    const user = await userModel.findOne({
+      _id: req.cookies.idUser
+    }).select("tokenUser");
+  
+    req.flash("success", "Mật khẩu của bạn đã được đổi!");
+    res.clearCookie("idUser");
+    const time = 3 * 24 * 60 * 60 * 1000;
+    res.cookie("tokenUser", user.tokenUser, { expires: new Date(Date.now() + time)});
+    res.redirect("/");
+  } catch (error) {
+    res.send("403");
+  }
 }

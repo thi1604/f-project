@@ -11,19 +11,22 @@ module.exports.general = async (req, res) => {
 }
 
 module.exports.generalPost = async (req, res) => {
-
-  const data = await settingModel.findOne({});
-
-  if(data){
-    await settingModel.updateOne({
-      _id : data.id
-    }, req.body);
+  try {
+    const data = await settingModel.findOne({});
+  
+    if(data){
+      await settingModel.updateOne({
+        _id : data.id
+      }, req.body);
+    }
+  
+    else{
+      const newData = new settingModel(req.body);
+      await newData.save();
+    }
+    req.flash("success", "Cập nhật thành công!");
+    res.redirect("back");
+  } catch (error) {
+    res.send("403");
   }
-
-  else{
-    const newData = new settingModel(req.body);
-    await newData.save();
-  }
-  req.flash("success", "Cập nhật thành công!");
-  res.redirect("back");
 }

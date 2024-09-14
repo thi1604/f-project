@@ -64,45 +64,52 @@ module.exports.addPost = async (req, res) => {
 };
 
 module.exports.detail = async (req, res) => {
-  const cartId = req.cookies.cartId;
-  const cartCurrent = await cartModel.findOne({
-    _id: cartId
-  });
-
-  cartCurrent.totalPrice = 0;
-
-  for (const item of cartCurrent.products) {
-    // console.log("ok");
-    const productCurrent = await product.findOne({
-      _id: item.idProduct
-    }).select("thumbnail price title discountPercentage stock slug id"); 
+  try {
     
-    // console.log(productCurrent);
-
-    //Check so luong san pham trong gio hang co lon hon stock
-    // if(item.quantity > productCurrent.stock){
-    //   item.quantity = productCurrent.stock;
-
-    // }
-    //EndCheck so luong san pham trong gio hang co lon hon stock
-
-
-    productCurrent.priceNew = parseInt(((1 - productCurrent.discountPercentage/100) * productCurrent.price).toFixed(0));
-    productCurrent.totalPriceProduct = productCurrent.priceNew * item.quantity;
-
-    // console.log(productCurrent.totalPriceProduct);
-    item.infoProduct = productCurrent;
-    if(item.choose == "true")
-      cartCurrent.totalPrice += productCurrent.totalPriceProduct;
+    const cartId = req.cookies.cartId;
+    const cartCurrent = await cartModel.findOne({
+      _id: cartId
+    });
+  
+    cartCurrent.totalPrice = 0;
+  
+    for (const item of cartCurrent.products) {
+      // console.log("ok");
+      const productCurrent = await product.findOne({
+        _id: item.idProduct
+      }).select("thumbnail price title discountPercentage stock slug id"); 
+      
+      // console.log(productCurrent);
+  
+      //Check so luong san pham trong gio hang co lon hon stock
+      // if(item.quantity > productCurrent.stock){
+      //   item.quantity = productCurrent.stock;
+  
+      // }
+      //EndCheck so luong san pham trong gio hang co lon hon stock
+  
+  
+      productCurrent.priceNew = parseInt(((1 - productCurrent.discountPercentage/100) * productCurrent.price).toFixed(0));
+      productCurrent.totalPriceProduct = productCurrent.priceNew * item.quantity;
+  
+      // console.log(productCurrent.totalPriceProduct);
+      item.infoProduct = productCurrent;
+      if(item.choose == "true")
+        cartCurrent.totalPrice += productCurrent.totalPriceProduct;
+    }
+  
+    res.render("client/pages/cart/index.pug", {
+      pageTitle: "Giỏ hàng",
+      cartDetail: cartCurrent
+    });
+  } catch (error) {
+    res.send("403");
   }
-
-  res.render("client/pages/cart/index.pug", {
-    pageTitle: "Giỏ hàng",
-    cartDetail: cartCurrent
-  });
 }
 
 module.exports.detailPatch = async (req, res) => {
+  try {
+    
     const listProductId = req.body;
     const productsInCart = await cartModel.findOne({
       _id: req.cookies.cartId
@@ -147,6 +154,9 @@ module.exports.detailPatch = async (req, res) => {
     res.json({
       code: 200
     });
+  } catch (error) {
+    res.send("403");
+  }
 }
 
 module.exports.delete = async (req, res) => {
