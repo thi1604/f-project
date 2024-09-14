@@ -16,6 +16,11 @@ router.get("/role", controller.indexRole);
 router.patch("/roles/restore/:id", controller.restorePatch);
 //End role
 
+// account
+router.get("/account", controller.indexAccount);
+router.patch("/account/restore/:id", controller.restoreAccPatch);
+//End account
+
 module.exports = router;
 
 

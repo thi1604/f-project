@@ -25,8 +25,9 @@ router.patch("/edit/:id",
   controller.editPatch
 );
 
-
 router.get("/detail/:id", controller.detail);
 router.patch("/change-status/:id/:status", controller.changeStatus);
+
+router.patch("/delete/:id", controller.deletePatch);
 
 module.exports = router;

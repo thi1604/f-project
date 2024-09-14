@@ -246,3 +246,90 @@ module.exports.restorePatch = async (req, res)=>{
 }
 //End Role
 
+
+// Account
+module.exports.indexAccount = async (req, res)=>{
+  const filter = {
+    deleted : true
+  };
+
+  if(req.query.status){
+    filter.status = req.query.status;
+  }
+  // Tìm kiếm
+  let keyword = "";
+  if(req.query.keyword) {
+    //Lay san pham theo keyword tuong doi
+    const regex = new RegExp(req.query.keyword, "i");
+    filter.title = regex;
+    keyword = req.query.keyword;
+  }
+
+  const listFilter = [
+    {
+      label : "Tất cả",
+      status : ""
+    },
+    {
+      label : "Hoạt động",
+      status : "active"
+    },
+    {
+      label : "Dừng hoạt động",
+      status : "inactive"
+    }
+  ];
+
+  const listActions = [
+    {
+      label : "Khôi phục",
+      status : "restore"
+    },
+    {
+      label : "Xóa vĩnh viễn",
+      status : "permanently-deleted"
+    }
+  ]
+
+  const Pagination = await pagination(req, filter, "accounts");
+  const listProducts = await account.find(filter).limit(Pagination.limitItems).skip(Pagination.skip);
+  for(item of listProducts){
+    const namePersonDeleted = await account.findOne({
+      _id: item.idPersonUpdated
+    }).select("fullName");
+    if(namePersonDeleted){
+      item.namePersonDeleted = namePersonDeleted.fullName;
+    }
+    item.formatUpdatedAt = moment(item.updatedAt).format("DD/MM/YY HH:mm:ss");
+  }
+
+  res.render("admin/pages/trash/accounts/index.pug", {
+    pageTitle : "Trang thùng rác",
+    listProducts: listProducts,
+    pagination : Pagination,
+    listFilter : listFilter,
+    listActions : listActions,
+    keyword: keyword
+  });
+
+}
+
+module.exports.restoreAccPatch = async (req, res)=>{
+  try {
+    const id = req.params.id;
+    await account.updateOne({
+      _id : id
+    }, 
+    {
+      deleted : false
+    });
+    req.flash('success', 'Khôi phục thành công!');
+    res.json({
+      code : 200
+    })
+  } catch (error) {
+    req.flash("error", "Lỗi!");
+  }
+}
+//End Account
+

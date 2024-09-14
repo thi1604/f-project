@@ -176,3 +176,31 @@ module.exports.changeStatus = async (req, res) => {
 }
 
 //End ChangeStatus
+
+// delete
+module.exports.deletePatch = async (req, res)=>{
+  try {
+    const id = req.body.idAccount;
+    const item = account.findOne({
+      _id: id
+    });
+    if(!item){
+      req.flash("error", "Lỗi!");
+    }
+    else{
+      await account.updateOne({
+        _id: id
+      }, {
+        deleted: true
+      });
+      req.flash("success", "Xóa thành công!");
+      res.json({
+        code: 200
+      });
+    }
+  } catch (error) {
+    req.flash("error", "Lỗi!");
+  } 
+}
+
+//End delete

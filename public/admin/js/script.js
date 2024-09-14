@@ -432,6 +432,33 @@ if(listButtonDeleteRole.length > 0) {
 } 
 // End Delete role admin 
 
+// Delete account admin
+const listButtonDeleteAccount = document.querySelectorAll("[delete-account-id]");
+if(listButtonDeleteAccount.length > 0) {
+  listButtonDeleteAccount.forEach(item => {
+    item.addEventListener("click", ()=>{
+      const link = item.getAttribute("link");
+      const data = {
+        idAccount: item.getAttribute("delete-account-id")
+      };
+      fetch(link, {
+        method: "PATCH",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(data)
+      })
+      .then(res=> res.json())
+      .then(data => {
+        if(data.code == 200)
+          window.location.reload();
+      })
+      
+    });
+  });
+} 
+// End Delete account admin
+
 
 
 
