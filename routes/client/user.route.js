@@ -22,7 +22,12 @@ router.patch(
   upload.single("avatar"),
   uploadtoCloud.uploadtoCloud,
   controller.editPatch
- );
+);
+ 
+router.get("/change-password", controller.changePassword);
+router.patch("/change-password", controller.changePasswordPatch);
+
+// router.get("/detail/change-password/check-otp", controller.checkOtp);
 
 router.get("/password/forgot", controller.forgotPassword);
 
@@ -35,7 +40,5 @@ router.post("/password/check-otp", controller.checkOtpPost);
 router.get("/password/reset-password", controller.resetPassword);
 
 router.patch("/password/reset-password", controller.resetPasswordPatch);
-
-
 
 module.exports = router;

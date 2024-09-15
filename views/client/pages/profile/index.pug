@@ -38,8 +38,6 @@ block main
           name="phone"
           value=(user.phone ? user.phone : "")
         )
-      div(class="form-group")
-        button(type="button" class="btn btn-info") Đổi mật khẩu?
       div(
         class="form-group"
         upload-image
@@ -64,7 +62,10 @@ block main
           class="btn btn-primary"
         ) Cập nhật
         a(
-          href=`/${prefix}/accounts`
+          href='/'
           class="btn btn-danger ml-5"
         ) Hủy
+    a(href="/user/change-password"
+      class="btn btn-info"
+    ) Đổi mật khẩu?
     

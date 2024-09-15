@@ -41,8 +41,10 @@ header.header
               li
                 a(href="/user/login") Đăng nhập
             else 
-              li
+              li(class="infor-user")
                 a(href=`/user/detail/${user.id}`) #{user.fullName}
+                .img-user 
+                  img(src=user.avatar, alt=user.fullName)
               li
                 a(href="/user/logout") Đăng xuất
               

@@ -138,7 +138,6 @@ if(chooseAll){
 // End Check choose all
 
 
-
 // Chon san pham ben cart
 
 // if(chooseAll){
@@ -148,5 +147,20 @@ if(chooseAll){
 //   }
 // }
 
-
 // End Chon san pham ben cart
+
+//preview img in form
+const divImage = document.querySelector("[upload-image]");
+if(divImage){
+  const imageInput = divImage.querySelector("[upload-image-input]"); 
+  const imagePreview = divImage.querySelector("[upload-image-preview]");
+  if(imageInput){
+    imageInput.addEventListener("change", ()=>{
+      const file = imageInput.files[0];
+      if(file){
+        imagePreview.src = URL.createObjectURL(file);
+      }
+    });
+  } 
+}
+//End preview img in form

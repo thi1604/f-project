@@ -81,6 +81,7 @@ module.exports.loginPost = async (req, res) => {
 }
 
 module.exports.detail = async (req, res) => {
+  console.log(req.params);
   if(req.cookies.tokenUser){
     const idUser = req.params.id;
     if(idUser != res.locals.user.id){
@@ -115,6 +116,36 @@ module.exports.editPatch = async (req, res) => {
   }
   else {
     res.redirect("/user/login");
+  }
+}
+
+module.exports.changePassword = async (req, res) => {
+  res.render("client/pages/profile/change-password.pug",{
+    pageTitle: "Đổi mật khẩu"
+  });
+}
+
+module.exports.changePasswordPatch = async (req, res) => {
+  const {passwordOld, passwordNew, passwordNewAgain} = req.body;
+  const user = res.locals.user
+  // console.log(passwordOld, passwordNew, passwordNewAgain);
+  if(passwordNew != passwordNewAgain) {
+    req.flash("error", "Mật khẩu mới không khớp!");
+    res.redirect("back");
+  }
+  else if(md5(passwordOld) != user.password){
+    req.flash("error", "Mật khẩu cũ không chính xác!");
+    res.redirect("back");
+  }
+  else {
+    await userModel.updateOne({
+      _id: user.id
+    },{
+      password: md5(passwordNew)
+    });
+    req.flash("success", "Đổi mật khẩu thành công!");
+    res.redirect(`/user/detail/${user.id}`);
+
   }
 }
 
@@ -239,4 +270,14 @@ module.exports.resetPasswordPatch = async (req, res) => {
   } catch (error) {
     res.send("403");
   }
+}
+
+module.exports.Password = async (req, res) => {
+  // if(!req.cookies.otp){
+  //   res.redirect("/user/password/forgot");
+  //   return;
+  // }
+  res.render("client/pages/user/reset-password.pug", {
+    pageTitle: "Tạo lại mật khẩu mới"
+  });
 }
