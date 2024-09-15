@@ -11,7 +11,6 @@ module.exports.register = async (req, res) => {
   });
 }
 
-
 module.exports.registerPost = async (req, res) => {
   if(!req.body.fullName || !req.body.email || !req.body.password){
     req.flash("error", "Vui lòng nhập đầy đủ thông tin bắt buộc!");
@@ -81,6 +80,43 @@ module.exports.loginPost = async (req, res) => {
   res.redirect("/");
 }
 
+module.exports.detail = async (req, res) => {
+  if(req.cookies.tokenUser){
+    const idUser = req.params.id;
+    if(idUser != res.locals.user.id){
+      req.flash("error", "Lỗi!");
+      res.redirect("/");
+    }
+    else{
+      res.render("client/pages/profile/index.pug", {
+        pageTitle: "Trang chi tiết tài khoản"
+      });
+    }
+  }
+  else
+    res.redirect("/user/login");
+}
+
+module.exports.editPatch = async (req, res) => {
+  if(req.cookies.tokenUser) {
+    const idUser = req.params.id;
+    if(idUser != res.locals.user.id){
+      req.flash("error", "Lỗi!");
+      res.redirect("/");
+    }
+    else{
+      const id = res.locals.user.id;
+      await userModel.updateOne({
+        _id: id
+      }, req.body);
+    }
+    req.flash("success", "Cập nhật thành công!");
+    res.redirect("back");
+  }
+  else {
+    res.redirect("/user/login");
+  }
+}
 
 module.exports.logout = async (req, res) => {
   res.clearCookie("tokenUser");
@@ -131,7 +167,6 @@ module.exports.forgotPasswordPost = async (req, res) => {
   res.redirect(`/user/password/check-otp?email=${emailCurrent.email}`);
 }
 
-
 module.exports.checkOtp = async (req, res) => {
   const email = req.query.email;
   res.render("client/pages/user/check-otp.pug", {
@@ -160,7 +195,6 @@ module.exports.checkOtpPost = async (req, res) => {
 
   res.redirect("/user/password/reset-password");
 }
-
 
 module.exports.resetPassword = async (req, res) => {
   // if(!req.cookies.otp){

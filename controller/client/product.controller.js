@@ -83,6 +83,10 @@ module.exports.category = async (req, res) => {
         deleted: false,
         status: "active"
     }).skip(pagination.skip).limit(pagination.limitItems).select("-description");
+
+    for (const item of listProducts) {
+        item.priceNew = ((1 - item.discountPercentage/100) * item.price).toFixed(0);
+    }
         
     res.render("client/pages/product/index.pug", {
         pageTitle: idCategoryCurrent.title,

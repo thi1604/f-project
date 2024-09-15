@@ -245,3 +245,14 @@
 /* End pagination */
 
 
+/* previewImage */
+.image-preview {
+    width: 100px;
+    height: auto;
+    margin-top: 10px;
+    border-radius: 5px;
+    border: 1px solid #ddd;
+  }
+  /* End previewImage */
+
+
