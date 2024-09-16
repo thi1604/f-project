@@ -77,11 +77,16 @@ module.exports.loginPost = async (req, res) => {
   req.flash("success", "Đăng nhập thành công!");
   const time = 24 * 3 * 60 * 60 * 1000;
   res.cookie("tokenUser", user.tokenUser, { expires: new Date(Date.now() + time)});
+  res.cookie(
+    "cartId", 
+    user.cartId, 
+    // { expire: new Date(Date.now() + time)}
+  );
   res.redirect("/");
 }
 
 module.exports.detail = async (req, res) => {
-  console.log(req.params);
+  // console.log(req.params);
   if(req.cookies.tokenUser){
     const idUser = req.params.id;
     if(idUser != res.locals.user.id){
@@ -120,32 +125,89 @@ module.exports.editPatch = async (req, res) => {
 }
 
 module.exports.changePassword = async (req, res) => {
-  res.render("client/pages/profile/change-password.pug",{
-    pageTitle: "Đổi mật khẩu"
-  });
+  if(req.cookies.tokenUser){
+    res.render("client/pages/profile/change-password.pug",{
+      pageTitle: "Đổi mật khẩu"
+    });
+  }
+  else{
+    res.redirect("/user/login");
+  }
 }
 
+let dataChangePassword= {};
+
 module.exports.changePasswordPatch = async (req, res) => {
-  const {passwordOld, passwordNew, passwordNewAgain} = req.body;
-  const user = res.locals.user
-  // console.log(passwordOld, passwordNew, passwordNewAgain);
-  if(passwordNew != passwordNewAgain) {
-    req.flash("error", "Mật khẩu mới không khớp!");
-    res.redirect("back");
-  }
-  else if(md5(passwordOld) != user.password){
-    req.flash("error", "Mật khẩu cũ không chính xác!");
-    res.redirect("back");
+  if(req.cookies.tokenUser){
+    dataChangePassword = {passwordOld, passwordNew, passwordNewAgain} = req.body;
+    if(dataChangePassword.passwordNew == ""){
+      req.flash("error", "Lỗi!");
+      res.redirect("/");
+      return;
+    }
+    const user = res.locals.user;
+    // console.log(passwordOld, passwordNew, passwordNewAgain);
+    if(dataChangePassword.passwordNew != dataChangePassword.passwordNewAgain) {
+      req.flash("error", "Mật khẩu mới không khớp!");
+      res.redirect("back");
+    }
+    else if(md5(dataChangePassword.passwordOld) != user.password){
+      req.flash("error", "Mật khẩu cũ không chính xác!");
+      res.redirect("back");
+    }
+    else {
+      const otp = helper.generateRandomNumber(6);
+  
+      helperSendEmail.sendEmail(
+        user.email,
+        "Mã OTP THAY ĐỔI MẬT KHẨU.",
+        `Mã xác thực của bạn là <b style ="color: green">${otp}</b>, có hiệu lực trong 3 phút. Vui lòng không chia sẻ mã cho bất kì ai.`
+      )
+      const dataEmail = {
+        email: user.email,
+        otp: otp,
+        expireAt: Date.now() + 3 * 60 * 1000
+      };
+  
+      const data = new forgotPasswordModel(dataEmail);
+      await data.save();
+      res.redirect("/user/change-password/check-otp");
+    }
   }
   else {
-    await userModel.updateOne({
-      _id: user.id
-    },{
-      password: md5(passwordNew)
-    });
-    req.flash("success", "Đổi mật khẩu thành công!");
-    res.redirect(`/user/detail/${user.id}`);
+    res.redirect("/user/login");
+  }
+}
 
+module.exports.changePasswordCheckOtp = async (req, res) => {
+  if(req.cookies.tokenUser){
+    res.render("client/pages/profile/check-otp.pug", {
+      pageTitle: "Xác thực otp"
+    });
+  }
+  else{
+    res.redirect("/user/login");
+  }
+}
+
+module.exports.changePasswordCheckOtpPatch = async (req, res) => {
+  const user = res.locals.user;
+  if(req.cookies.tokenUser){
+    try {
+      await userModel.updateOne({
+        _id: user.id
+      },{
+        password: md5(dataChangePassword.passwordNew)
+      });
+      req.flash("success", "Đổi mật khẩu thành công!");
+      res.redirect(`/user/detail/${user.id}`);
+    } catch (error) {
+      req.flash("error", "Lỗi!");
+      res.redirect("/");
+    }
+  }
+  else{
+    res.redirect("/user/login");
   }
 }
 

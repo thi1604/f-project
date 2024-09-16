@@ -11,8 +11,8 @@ const middlewareSetting = require("../../middlewares/client/setting-middleware")
 
 module.exports.index = (app) => {
     app.use(middlewareCategory.category);
-    app.use(middlewareCartId);
     app.use(middlewareUser.infoUser);
+    app.use(middlewareCartId);
     app.use(middlewareSetting);
     app.use("/", homeRouter);
     app.use("/products", productRouter);

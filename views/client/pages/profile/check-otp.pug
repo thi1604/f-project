@@ -1,0 +1,29 @@
+extends ../../layouts/default.pug
+include ../../mixins/box-head.pug
+
+block main
+  .container.my-3
+    .row
+      .col-8.mx-auto
+        +box-head(pageTitle)
+
+        form(
+          action="/user/change-password/check-otp?_method=PATCH"
+          method="POST"
+        )
+          div(class="form-group")
+            | <i>Vui lòng check mail (Mail đăng kí tài khoản) để lấy mã!</i>
+          div(class="form-group")
+            label(for="otp") Mã OTP
+            input(
+              type="text"
+              class="form-control"
+              id="otp"
+              name="otp"
+              required
+            )
+          div(class="form-group")
+            button(
+              type="submit"
+              class="btn btn-primary btn-block"
+            ) Xác thực

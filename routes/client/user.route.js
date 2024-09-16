@@ -25,7 +25,12 @@ router.patch(
 );
  
 router.get("/change-password", controller.changePassword);
+
 router.patch("/change-password", controller.changePasswordPatch);
+
+router.get("/change-password/check-otp", controller.changePasswordCheckOtp);
+
+router.patch("/change-password/check-otp", controller.changePasswordCheckOtpPatch);
 
 // router.get("/detail/change-password/check-otp", controller.checkOtp);
 

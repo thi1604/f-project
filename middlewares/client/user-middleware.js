@@ -9,6 +9,11 @@ module.exports.infoUser = async (req, res, next) => {
     });
     if(user){
       res.locals.user = user;
+      // res.cookie(
+      //   "cartId", 
+      //   user.cartId, 
+      //   // { expire: new Date(Date.now() + time)}
+      // );
     }
   }
   next();

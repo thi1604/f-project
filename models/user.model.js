@@ -6,6 +6,7 @@ const userSchema = new mongoose.Schema({
   phone: String,
   password: String,
   tokenUser: String,
+  cartId: String,
   avatar: {
     type: String,
     default: "https://res.cloudinary.com/dddqj4xho/image/upload/v1722671580/0d64989794b1a4c9d89bff571d3d5842_jrbalx.jpg"
