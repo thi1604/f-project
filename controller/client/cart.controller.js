@@ -6,7 +6,7 @@ module.exports.addPost = async (req, res) => {
   try{
     const productId = req.params.productId;
 
-    const cartId = req.cookies.cartId;
+    const cartId = req.cookies.cartId ? req.cookies.cartId : req.cookies.cartNotLoginId;
 
     const productCurrent = await product.findOne({
       _id: productId
@@ -66,7 +66,7 @@ module.exports.addPost = async (req, res) => {
 module.exports.detail = async (req, res) => {
   try {
     
-    const cartId = req.cookies.cartId;
+    const cartId = req.cookies.cartId ? req.cookies.cartId : req.cookies.cartNotLoginId;
     const cartCurrent = await cartModel.findOne({
       _id: cartId
     });
@@ -109,22 +109,22 @@ module.exports.detail = async (req, res) => {
 
 module.exports.detailPatch = async (req, res) => {
   try {
-    
+    const cartId = req.cookies.cartId ? req.cookies.cartId : req.cookies.cartNotLoginId;
     const listProductId = req.body;
     const productsInCart = await cartModel.findOne({
-      _id: req.cookies.cartId
+      _id: cartId
     });
     //Neu user chon toan bo, cho hien thi checked tren nut checkall
     if(listProductId.length == productsInCart.products.length){
       await cartModel.updateOne({
-        _id: req.cookies.cartId
+        _id: cartId
       },{
         chooseAll: true
       });
     }
     else{
       await cartModel.updateOne({
-        _id: req.cookies.cartId
+        _id: cartId
       },{
         chooseAll: false
       });
@@ -132,7 +132,7 @@ module.exports.detailPatch = async (req, res) => {
 
     for (const item of productsInCart.products) {
       await cartModel.updateOne({
-        _id: req.cookies.cartId,
+        _id: cartId,
         'products.idProduct': item.idProduct
       }, {
         $set: {
@@ -143,7 +143,7 @@ module.exports.detailPatch = async (req, res) => {
     if(listProductId)
       for (const item of listProductId) {
         await cartModel.updateOne({
-          _id: req.cookies.cartId,
+          _id: cartId,
           'products.idProduct': item
         }, {
           $set: {
@@ -161,9 +161,11 @@ module.exports.detailPatch = async (req, res) => {
 
 module.exports.delete = async (req, res) => {
   const idProduct = req.params.id;
+  const cartId = req.cookies.cartId ? req.cookies.cartId : req.cookies.cartNotLoginId;
+
   try{
     await cartModel.updateOne({
-      _id: req.cookies.cartId,
+      _id: cartId,
     }, {
       $pull: {
         "products": {
@@ -183,9 +185,11 @@ module.exports.delete = async (req, res) => {
 
 module.exports.update = async (req, res) => {
   const idProduct = req.params.productId;
+  const cartId = req.cookies.cartId ? req.cookies.cartId : req.cookies.cartNotLoginId;
+
   try{
     await cartModel.updateOne({
-      _id: req.cookies.cartId,
+      _id: cartId,
       'products.idProduct': idProduct
     }, {
       $set: {

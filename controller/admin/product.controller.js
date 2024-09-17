@@ -309,7 +309,6 @@ module.exports.editPatch = async (req, res) => {
 
 module.exports.detail = async (req, res)=>{
   try {
-    error
     const id = req.params.id;
     const item = await product.findOne({
       _id : id

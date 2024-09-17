@@ -80,7 +80,7 @@ module.exports.loginPost = async (req, res) => {
   res.cookie(
     "cartId", 
     user.cartId, 
-    // { expire: new Date(Date.now() + time)}
+    { expire: new Date(Date.now() + time)}
   );
   res.redirect("/");
 }
@@ -213,6 +213,7 @@ module.exports.changePasswordCheckOtpPatch = async (req, res) => {
 
 module.exports.logout = async (req, res) => {
   res.clearCookie("tokenUser");
+  res.clearCookie("cartId");
   res.redirect("/user/login");
 }
 

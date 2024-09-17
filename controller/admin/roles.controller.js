@@ -168,26 +168,31 @@ module.exports.detail = async (req, res)=>{
 }
 
 module.exports.deletePatch = async (req, res)=>{
-  try {
-    const id = req.body.idRole;
-    const item = roles.findOne({
-      _id: id
-    });
-    if(!item){
-      req.flash("error", "Lỗi!");
-    }
-    else{
-      await roles.updateOne({
+  if(res.locals.role.permissions.includes("roles_delete")){
+    try {
+      const id = req.body.idRole;
+      const item = roles.findOne({
         _id: id
-      }, {
-        deleted: true
       });
-      req.flash("success", "Xóa thành công!");
-      res.json({
-        code: 200
-      });
-    }
-  } catch (error) {
-    req.flash("error", "Lỗi!");
-  } 
+      if(!item){
+        req.flash("error", "Lỗi!");
+      }
+      else{
+        await roles.updateOne({
+          _id: id
+        }, {
+          deleted: true
+        });
+        req.flash("success", "Xóa thành công!");
+        res.json({
+          code: 200
+        });
+      }
+    } catch (error) {
+      req.flash("error", "Lỗi!");
+    } 
+  }
+  else{
+    res.send("403");
+  }
 }
