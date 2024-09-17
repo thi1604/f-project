@@ -7,7 +7,10 @@ module.exports.index = async (req, res) => {
   try {
     
     // Lay ra cac san pham user da chon
-    const cartId = req.cookies.cartId;
+    let cartId = req.cookies.cartNotLoginId;
+    if(req.cookies.cartId){
+      cartId = req.cookies.cartId;
+    }
     // console.log(cartId);
     const listProductsChoosed = [];
   
@@ -47,6 +50,10 @@ module.exports.index = async (req, res) => {
 
 module.exports.orderPost = async (req, res) => {
   try {
+    let cartId = req.cookies.cartNotLoginId;
+    if(req.cookies.cartId){
+      cartId = req.cookies.cartId;
+    }
     const newCheckout = {};
     //Lay phan thong tin nguoi dat hang
     newCheckout.userInfor = req.body;
@@ -56,7 +63,7 @@ module.exports.orderPost = async (req, res) => {
     newCheckout.products = [];
     
     const cartCurrent = await cartModel.findOne({
-      _id: req.cookies.cartId,
+      _id: cartId,
     });
     
     for (const item of cartCurrent.products) {
@@ -76,7 +83,7 @@ module.exports.orderPost = async (req, res) => {
     
           //Cap nhat lai san pham trong gio hang
           await cartModel.updateOne({
-            _id: req.cookies.cartId,
+            _id: cartId,
           }, {
             $pull: {
               'products': {
