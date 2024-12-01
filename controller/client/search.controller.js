@@ -24,6 +24,10 @@ module.exports.index = async (req, res) => {
         possition: "desc"
       });
     }
+    else {
+      res.redirect('/products');
+      return;
+    }
 
 
 

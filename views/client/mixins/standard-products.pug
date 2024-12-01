@@ -4,7 +4,7 @@ mixin list-products-standard(title, products)
             .col-12
                 +box-head(title)
             if(products.length == 0)
-                h2 Đơn hàng rỗng!
+                h2 Empty!
             else 
                 for item in products
                     .row

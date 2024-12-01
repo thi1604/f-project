@@ -65,11 +65,13 @@ module.exports.addPost = async (req, res) => {
 
 module.exports.detail = async (req, res) => {
   try {
-    
     const cartId = req.cookies.cartId ? req.cookies.cartId : req.cookies.cartNotLoginId;
+    console.log(cartId);
     const cartCurrent = await cartModel.findOne({
       _id: cartId
     });
+
+    console.log(cartCurrent);
   
     cartCurrent.totalPrice = 0;
   
@@ -104,6 +106,7 @@ module.exports.detail = async (req, res) => {
     });
   } catch (error) {
     res.send("403");
+    console.log(error);
   }
 }
 
